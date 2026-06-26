@@ -27,6 +27,14 @@ const Navbar = () => {
   const navRef = useRef(null);
   const clerk = useClerk();
   const navigate = useNavigate();
+
+  const navItems = [
+    { label: "Home", href: "/" },
+    { label: "Doctors", href: "/doctors" },
+    { label: "Services", href: "/services" },
+    { label: "Appointments", href: "/appointments" },
+    { label: "Contact", href: "/contact" },
+  ];
   return (
     <>
       <div className={navbarStyles.navbarBorder}>
@@ -43,6 +51,12 @@ const Navbar = () => {
                       className={navbarStyles.logoImage}
                     />
                   </div>
+                </div>
+                <div className={navbarStyles.logoTextContainer}>
+                  <h1 className={navbarStyles.logoTitle}>Vaidyra</h1>
+                  <p className={navbarStyles.logoSubtitle}>
+                    Healthcare Solutions
+                  </p>
                 </div>
               </Link>
             </div>
