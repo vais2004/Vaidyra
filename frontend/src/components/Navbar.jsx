@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { navbarStyles } from "../assets/dummyStyles";
 import { User, Key, Menu, X } from "lucide-react";
 import {
@@ -29,6 +29,44 @@ const Navbar = () => {
   const clerk = useClerk();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.screenY;
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        setShowNavbar(false);
+      } else {
+        setShowNavbar(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
+  //doctor login
+
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === STORAGE_KEY) {
+        setIsDoctorLoggedIn(Boolean(e.newValue));
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
+  //close the toggle menu for mobile when click outside
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isOpen && navRef.current && !navRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
   const navItems = [
     { label: "Home", href: "/" },
     { label: "Doctors", href: "/doctors" },
@@ -40,6 +78,7 @@ const Navbar = () => {
     <>
       <div className={navbarStyles.navbarBorder}>
         <nav
+          ref={navRef}
           className={`${navbarStyles.navbarContainer} ${showNavbar ? navbarStyles.navbarVisible : navbarStyles.navbarHidden}`}>
           <div className={navbarStyles.contentWrapper}>
             <div className={navbarStyles.flexContainer}>
