@@ -1,12 +1,13 @@
 import React, { useRef, useState } from "react";
 import { navbarStyles } from "../assets/dummyStyles";
+import { User } from "lucide-react";
 import {
   Link,
   useLocation,
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import { useClerk } from "@clerk/clerk-react";
+import { SignedOut, useClerk } from "@clerk/clerk-react";
 import logo from "../assets/logo.png";
 
 const STORAGE_KEY = "doctorToken_v1";
@@ -59,6 +60,33 @@ const Navbar = () => {
                   </p>
                 </div>
               </Link>
+              <div className={navbarStyles.desktopNav}>
+                <div className={navbarStyles.navItemsContainer}>
+                  {navItems.map((item) => {
+                    const isActive = location.pathname == item.href;
+                    return (
+                      <Link
+                        key={item.href}
+                        to={item.href}
+                        className={`${navbarStyles.navItem} ${isActive ? navbarStyles.navItemActive : navbarStyles.navItemInactive}`}>
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className={navbarStyles.rightContainer}>
+                <SignedOut>
+                  <Link
+                    to="/doctor-admin/login"
+                    className={navbarStyles.doctorAdminButton}>
+                    <User className={navbarStyles.doctorAdminIcon} />
+                    <span className={navbarStyles.doctorAdminText}>
+                      Doctor Admin
+                    </span>
+                  </Link>
+                </SignedOut>
+              </div>
             </div>
           </div>
         </nav>
