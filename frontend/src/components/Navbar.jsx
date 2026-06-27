@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react";
 import { navbarStyles } from "../assets/dummyStyles";
-import { User } from "lucide-react";
+import { User, Key, Menu, X } from "lucide-react";
 import {
   Link,
   useLocation,
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import { SignedOut, useClerk } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, useClerk, UserButton } from "@clerk/clerk-react";
 import logo from "../assets/logo.png";
 
 const STORAGE_KEY = "doctorToken_v1";
@@ -85,10 +85,66 @@ const Navbar = () => {
                       Doctor Admin
                     </span>
                   </Link>
+                  <button
+                    onClick={() => clerk.openSignIn()}
+                    className={navbarStyles.loginButton}>
+                    <Key className={navbarStyles.loginIcon} />
+                    Login
+                  </button>
                 </SignedOut>
+
+                <SignedIn>
+                  <UserButton afterSignOutUrl="/" />
+                </SignedIn>
+
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className={navbarStyles.mobileToggle}>
+                  {isOpen ? (
+                    <X className={navbarStyles.toggleIcon} />
+                  ) : (
+                    <Menu className={navbarStyles.toggleIcon} />
+                  )}
+                </button>
               </div>
             </div>
+            {/* mobile nav */}
+            {isOpen && (
+              <div className={navbarStyles.mobileMenu}>
+                {navItems.map((item, index) => {
+                  const isActive = location.pathname === item.href;
+                  return (
+                    <Link
+                      key={index}
+                      to={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`${navbarStyles.mobileMenuItem} ${isActive ? navbarStyles.mobileMenuItemActive : navbarStyles.mobileMenuItemInactive}`}>
+                      {item.label}
+                    </Link>
+                  );
+                })}
+                <SignedOut>
+                  <Link
+                    to="/doctor-admin/login"
+                    className={navbarStyles.mobileDoctorAdminButton}
+                    onClick={() => setIsOpen(false)}>
+                    Doctor Admin
+                  </Link>
+                  <div className={navbarStyles.mobileLoginContainer}>
+                    <button
+                      onClick={() => {
+                        setIsOpen(false);
+                        clerk.openSignIn();
+                      }}
+                      className={navbarStyles.mobileLoginButton}>
+                      Login
+                    </button>
+                  </div>
+                </SignedOut>
+              </div>
+            )}
           </div>
+          <style>{navbarStyles.animationStyles}</style>
         </nav>
       </div>
     </>
