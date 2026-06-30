@@ -277,12 +277,10 @@ export async function updateDoctor(req, res) {
     const body = req.body || {};
 
     if (!req.doctor || String(req.doctor._id || req.doctor.id) !== String(id)) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          message: "Not authorized to update this doctor",
-        });
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to update this doctor",
+      });
     }
 
     const existing = await Doctor.findById(id);
@@ -346,6 +344,37 @@ export async function updateDoctor(req, res) {
     return res.json({ success: true, data: out });
   } catch (err) {
     console.error("updateDoctor error:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+}
+
+//DELETE doctor
+
+export async function deleteDoctor(req, res) {
+  try {
+    const { id } = req.params;
+    const existing = await Doctor.findById(id);
+    if (!existing) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Doctor not found" });
+    }
+
+    if (existing.imagePublicId) {
+      try {
+        await deleteFromCloudinary(existing.imagePublicId);
+      } catch (error) {
+        console.warn(
+          "Delete from cloudinary warning:",
+          error?.message || error,
+        );
+      }
+    }
+
+    await Doctor.findByIdAndDelete(id);
+    return res.json({ success: true, message: "Doctor removed" });
+  } catch (err) {
+    console.error("deleteDoctor error:", err);
     return res.status(500).json({ success: false, message: "Server error" });
   }
 }
