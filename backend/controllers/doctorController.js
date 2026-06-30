@@ -247,7 +247,25 @@ export const getDoctors = async (req, res) => {
       meta: { page, limit, total },
     });
   } catch (err) {
-    console.error("getDoctors:", err);
+    console.error("getDoctors error:", err);
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+//GET doctor by id
+export async function getDoctorById(req, res) {
+  try {
+    const { id } = req.params;
+    const doc = await Doctor.findById(id).select("password").lean();
+    if (!doc) {
+      return res.status(404).json({
+        success: false,
+        message: "Doctor not found",
+      });
+      return res.json({ success: true, data: normalizeDocForClient(doc) });
+    }
+  } catch (err) {
+    console.error("getDoctorByID error:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+}
