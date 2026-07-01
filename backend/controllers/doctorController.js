@@ -378,3 +378,38 @@ export async function deleteDoctor(req, res) {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 }
+
+//to availability
+export async function toggleAvailability(req, res) {
+  try {
+    const { id } = req.params;
+
+    if (!req.doctor || String(req.doctor._id || req.doctor.id) !== String(id)) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to update this doctor's availability",
+      });
+    }
+
+    const doc = await Doctor.findById(id);
+    if (!doc) {
+      return res.status(404).json({
+        success: false,
+        message: "Doctor not found",
+      });
+    }
+    if (typeof doc.availability === "boolean") {
+      doc.availability = !doc.availability;
+    } else {
+      doc.availability =
+        doc.availability === "Available" ? "Unavailable" : "Available";
+    }
+    await doc.save();
+    const out = normalizeDocForClient(doc.toObject());
+    delete out.password;
+    return res.json({ success: true, data: out });
+  } catch (err) {
+    console.error("toggleAvailability error:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+}
