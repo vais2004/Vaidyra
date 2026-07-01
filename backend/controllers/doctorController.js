@@ -413,3 +413,50 @@ export async function toggleAvailability(req, res) {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 }
+
+// to login
+export async function doctorLogin(req, res) {
+  try {
+    const { email, password } = req.body || {};
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email and Password are required" });
+    }
+
+    const doc = await Doctor.findOne({ email: email.toLowerCase() }).select(
+      "+password",
+    );
+
+    if (!doc) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
+    if (doc.password !== password) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
+
+    const secret = process.env.JWT_SECRET;
+    if (!secret)
+      return res.status(500).json({
+        success: false,
+        message: "Server Misconfigured",
+      });
+    const token = jwt.sign(
+      { id: doc._id.toString(), email: doc.email, role: "doctor" },
+      secret,
+      { expiresIn: "7d" },
+    );
+    const out = doc.toObject();
+    delete out.password;
+    return res.json({ success: true, token, data: out });
+  } catch (err) {
+    console.error("doctorLogin error:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+}
