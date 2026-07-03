@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
-import Doctor from "../models/Doctor";
+import Doctor from "../models/Doctor.js";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-export async function doctorAuth(req, res, next) {
+export default async function doctorAuth(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer")) {
