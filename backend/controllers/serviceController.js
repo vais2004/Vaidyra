@@ -206,3 +206,34 @@ export async function updateService(req, res) {
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 }
+
+//to delete an service
+export async function deleteService(req, res) {
+  try {
+    const { id } = req.params;
+    const existing = await Service.findById(id);
+    if (!existing)
+      return res.status(404).json({
+        success: false,
+        message: "Service not found",
+      });
+    if (existing.imagePublicId) {
+      try {
+        await deleteFromCloudinary(existing.imagePublicId);
+      } catch (error) {
+        console.warn(
+          "Failed to delete image from cloudinary:",
+          error?.message || error,
+        );
+      }
+    }
+    await existing.deleteOne();
+    return res.status(200).json({
+      success: true,
+      message: "Service Deleted",
+    });
+  } catch (error) {
+    console.error("deleteService Error:", error);
+    return res.status(500).json({ success: false, message: "Server Error" });
+  }
+}
