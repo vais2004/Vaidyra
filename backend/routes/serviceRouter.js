@@ -7,7 +7,7 @@ import {
   getServiceById,
   getServices,
   updateService,
-} from "../controllers/serviceController";
+} from "../controllers/serviceController.js";
 
 const upload = multer({ dest: "/tmp" });
 const serviceRouter = express.Router();
