@@ -557,3 +557,33 @@ export const cancelAppointment = async (req, res) => {
     });
   }
 };
+
+//to get stats
+export const getStats = async (req, res) => {
+  try {
+    const total = await Appointment.countDocuments();
+
+    const paidAgg = await Appointment.aggregate([
+      { $match: { "payment.status": "Paid" } },
+      { $group: { _id: null, total: { $sum: "$fees" } } },
+    ]);
+    const revenue = (paidAgg[0] && paidAgg[0].total) || 0;
+
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const recent = await Appointment.countDocuments({
+      createdAt: { $gte: sevenDaysAgo },
+    });
+
+    return res.json({
+      success: true,
+      stats: { total, revenue, recentLast7Days: recent },
+    });
+  } catch (error) {
+    console.error("getStats error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
