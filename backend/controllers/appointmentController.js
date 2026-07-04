@@ -533,3 +533,27 @@ export const updateAppointment = async (req, res) => {
     });
   }
 };
+
+//to cancel appointment
+export const cancelAppointment = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const appt = await Appointment.findById(id);
+
+    if (!appt)
+      return res.status(404).json({
+        success: false,
+        message: "Appointment not found",
+      });
+    appt.status = "Canceled";
+    await appt.save();
+    return res.json({ success: true, appointment: appt });
+  } catch (error) {
+    console.error("cancelAppointment error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
