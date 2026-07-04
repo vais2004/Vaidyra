@@ -124,3 +124,23 @@ export async function getServices(req, res) {
     return res.status(500).json({ success: false, message: "Server Error" });
   }
 }
+
+//to get service by id
+export async function getServiceById(req, res) {
+  try {
+    const { id } = req.params;
+    const service = await Service.findById(id).lean();
+    if (!service)
+      return res.status(404).json({
+        success: false,
+        message: "Service not found",
+      });
+    return res.status(200).json({
+      success: true,
+      data: service,
+    });
+  } catch (error) {
+    console.error("GetServiceById Error:", error);
+    return res.status(500).json({ success: false, message: "Server Error" });
+  }
+}
