@@ -6,6 +6,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { connectDB } from "./config/db.connect.js";
 import doctorRouter from "./routes/doctorRouter.js";
 import serviceRouter from "./routes/serviceRouter.js";
+import appointmentRouter from "./routes/appointmentRoutes.js";
 
 const app = express();
 const port = 4000;
@@ -22,6 +23,7 @@ connectDB();
 //routes
 app.use("/api/doctors", doctorRouter);
 app.use("/api/services", serviceRouter);
+app.use("/api/appointments", appointmentRouter);
 
 app.get("/", (req, res) => {
   res.send("API WORKING");
