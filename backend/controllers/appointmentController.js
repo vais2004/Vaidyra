@@ -636,3 +636,17 @@ export const getAppointmentsByDoctor = async (req, res) => {
     });
   }
 };
+
+//to get Register user count
+export async function getRegisteredUserCount(req, res) {
+  try {
+    const totalUsers = await clerkClient.users.getCount();
+    return res.json({ success: true, totalUsers });
+  } catch (error) {
+    console.error("getRegisteredUserCount error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+}
