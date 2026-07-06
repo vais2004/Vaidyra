@@ -650,3 +650,15 @@ export async function getRegisteredUserCount(req, res) {
     });
   }
 }
+
+export default {
+  getAppointments,
+  getAppointmentsByPatient,
+  createAppointment,
+  confirmPayment,
+  updateAppointment,
+  cancelAppointment,
+  getStats,
+  getAppointmentsByDoctor,
+  getRegisteredUserCount,
+};
