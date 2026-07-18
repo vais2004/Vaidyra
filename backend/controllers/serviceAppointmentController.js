@@ -16,6 +16,7 @@ const safeNumber = (val) => {
   return Number.isFinite(n) ? n : null;
 };
 
+//this function will parse the time and return AM or PM
 function parseTimeString(timeStr) {
   if (!timeStr || typeof timeStr !== "string") return null;
   const t = timeStr.trim();
