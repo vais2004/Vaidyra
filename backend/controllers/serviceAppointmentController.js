@@ -100,6 +100,7 @@ export const createServiceAppointment = async (req, res) => {
       serviceImagePublicId: serviceImagePublicIdFromBody,
     } = body;
 
+    //basic validation
     if (!serviceId)
       return res
         .status(400)
@@ -119,13 +120,12 @@ export const createServiceAppointment = async (req, res) => {
 
     const numericAmount = safeNumber(amountFromBody ?? feesFromBody ?? 0);
     if (numericAmount === null || numericAmount < 0)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "amount/fees must be a valid number",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "amount/fees must be a valid number",
+      });
 
+    //for time slots
     let finalHour = hour !== undefined ? safeNumber(hour) : null;
     let finalMinute = minute !== undefined ? safeNumber(minute) : null;
     let finalAmpm = ampm || null;
@@ -146,13 +146,11 @@ export const createServiceAppointment = async (req, res) => {
       finalMinute === null ||
       (finalAmpm !== "AM" && finalAmpm !== "PM")
     ) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message:
-            "Time missing or invalid — provide time string or hour, minute and ampm.",
-        });
+      return res.status(400).json({
+        success: false,
+        message:
+          "Time missing or invalid — provide time string or hour, minute and ampm.",
+      });
     }
 
     // DUPLICATE BOOKING CHECK
@@ -167,13 +165,11 @@ export const createServiceAppointment = async (req, res) => {
         status: { $ne: "Canceled" },
       }).lean();
       if (existing)
-        return res
-          .status(409)
-          .json({
-            success: false,
-            message:
-              "You already have a booking for this service at the selected date and time.",
-          });
+        return res.status(409).json({
+          success: false,
+          message:
+            "You already have a booking for this service at the selected date and time.",
+        });
     } catch (chkErr) {
       console.warn("Duplicate booking check failed:", chkErr);
     }
@@ -278,13 +274,11 @@ export const createServiceAppointment = async (req, res) => {
         .json({ success: false, message: "Stripe not configured on server" });
     const frontendBase = buildFrontendBase(req);
     if (!frontendBase)
-      return res
-        .status(500)
-        .json({
-          success: false,
-          message:
-            "Frontend base URL not available. Set FRONTEND_URL or provide Origin header.",
-        });
+      return res.status(500).json({
+        success: false,
+        message:
+          "Frontend base URL not available. Set FRONTEND_URL or provide Origin header.",
+      });
 
     const successUrl = `${frontendBase}/service-appointment/success?session_id={CHECKOUT_SESSION_ID}`;
     const cancelUrl = `${frontendBase}/service-appointment/cancel`;
@@ -325,12 +319,10 @@ export const createServiceAppointment = async (req, res) => {
       console.error("Stripe create session error:", stripeErr);
       const message =
         stripeErr?.raw?.message || stripeErr?.message || "Stripe error";
-      return res
-        .status(502)
-        .json({
-          success: false,
-          message: `Payment provider error: ${message}`,
-        });
+      return res.status(502).json({
+        success: false,
+        message: `Payment provider error: ${message}`,
+      });
     }
 
     try {
@@ -344,24 +336,20 @@ export const createServiceAppointment = async (req, res) => {
           sessionId: session.id || "",
         },
       });
-      return res
-        .status(201)
-        .json({
-          success: true,
-          appointment: created,
-          checkoutUrl: session.url || null,
-        });
+      return res.status(201).json({
+        success: true,
+        appointment: created,
+        checkoutUrl: session.url || null,
+      });
     } catch (dbErr) {
       console.error(
         "DB error saving service appointment after stripe session:",
         dbErr,
       );
-      return res
-        .status(500)
-        .json({
-          success: false,
-          message: "Failed to create appointment record",
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Failed to create appointment record",
+      });
     }
   } catch (err) {
     console.error("createServiceAppointment unexpected:", err);
