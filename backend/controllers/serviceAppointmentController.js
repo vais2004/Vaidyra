@@ -39,6 +39,7 @@ function parseTimeString(timeStr) {
   return { hour: hh, minute: mm, ampm: "AM" };
 }
 
+//this function will create the frontend url
 const buildFrontendBase = (req) => {
   const env = process.env.FRONTEND_URL;
   if (env) return env.replace(/\/$/, "");
@@ -46,6 +47,7 @@ const buildFrontendBase = (req) => {
   return origin ? origin.replace(/\/$/, "") : null;
 };
 
+//this function will get the user from clerk and return the user details
 function resolveClerkUserId(req) {
   try {
     const auth = req.auth || {};
@@ -62,3 +64,6 @@ function resolveClerkUserId(req) {
     return null;
   }
 }
+
+
+
