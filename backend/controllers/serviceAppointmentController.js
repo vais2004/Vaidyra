@@ -465,6 +465,12 @@ export const getServiceAppointments = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit).lean;
+    const total = await ServiceAppointment.countDocuments(filter);
+    return res.json({
+      success: true,
+      appointments,
+      meta: { page, limit, total, count: appointments.length },
+    });
   } catch (err) {
     console.error("getServiceAppointments unexpected:", err);
     return res.status(500).json({ success: false, message: "Server error" });
