@@ -464,7 +464,8 @@ export const getServiceAppointments = async (req, res) => {
       .populate("serviceId", "name image imageUrl imageSmall")
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit).lean;
+      .limit(limit)
+      .lean();
     const total = await ServiceAppointment.countDocuments(filter);
     return res.json({
       success: true,
@@ -473,6 +474,24 @@ export const getServiceAppointments = async (req, res) => {
     });
   } catch (err) {
     console.error("getServiceAppointments unexpected:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+//to getServiceAppointmentById
+export const getServiceAppointmentById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const appt = await SerAppointment.findById(id).lean();
+
+    if (!appt)
+      return res.status(404).json({
+        success: false,
+        message: "Not found the appointment",
+      });
+    return res.json({ success: true, data: appt });
+  } catch (err) {
+    console.error("getServiceAppointmentById unexpected:", err);
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
