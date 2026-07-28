@@ -595,3 +595,64 @@ export const cancelServiceAppointment = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+//to get the statistic
+export const getServiceAppointmentStats = async (req, res) => {
+  try {
+    const services = await Service.aggregate([
+      {
+        $lookup: {
+          from: "serviceappointments",
+          localField: "_id",
+          foreignField: "serviceId",
+          as: "appointments",
+        },
+      },
+      {
+        $addFields: {
+          totalAppointments: { $size: "$appointments" },
+          completed: {
+            $size: {
+              $filter: {
+                input: "$appointments",
+                as: "a",
+                cond: { $eq: ["$$a.status", "Completed"] },
+              },
+            },
+          },
+          canceled: {
+            $size: {
+              $filter: {
+                input: "$appointments",
+                as: "a",
+                cond: { $eq: ["$$a.status", "Canceled"] },
+              },
+            },
+          },
+        },
+      },
+      { $addFields: { earning: { $multiply: ["$completed", "$price"] } } },
+      {
+        $project: {
+          name: 1,
+          price: 1,
+          image: "$imageUrl",
+          totalAppointments: 1,
+          completed: 1,
+          canceled: 1,
+          earning: 1,
+        },
+      },
+      { $sort: { createdAt: -1 } },
+    ]); //it will give you total appointment, complete appt
+    //cancel appt and total earning done by them
+    return res.json({
+      success: true,
+      services,
+      totalServices: services.length,
+    });
+  } catch (err) {
+    console.error("getServiceAppointmentStats unexpected:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
