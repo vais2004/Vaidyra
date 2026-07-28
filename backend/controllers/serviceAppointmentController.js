@@ -569,3 +569,29 @@ export const updateServiceAppointment = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+//to cancel the serviceAppointment
+export const cancelServiceAppointment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const appt = await ServiceAppointment.findById(id);
+
+    if (!appt)
+      return res.status(404).json({ success: false, message: "Not found" });
+    if (appt.status === "Completed")
+      return res.status(400).json({
+        success: false,
+        message: "Cannot cancel a completed appointment",
+      });
+
+    appt.status = "Canceled";
+    if (appt.payment)
+      appt.payment.status =
+        appt.payment.status === "Confirmed" ? "Canceled" : "Pending";
+    await appt.save();
+    return res.json({ success: true, data: appt });
+  } catch (err) {
+    console.error("cancelServiceAppointment unexpected:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
