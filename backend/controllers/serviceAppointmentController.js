@@ -656,3 +656,32 @@ export const getServiceAppointmentStats = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+//to get appointment for the patient
+export const getServiceAppointmentByPatient = async (req, res) => {
+  try {
+    const clerkUserId = resolveClerkUserId(req);
+    const { createdBy, mobile } = req.query;
+    const resolvedCreatedBy = createdBy || clerkUserId || null;
+
+    if (!resolvedCreatedBy && !mobile)
+      return res.json({
+        success: true,
+        data: [],
+      });
+    const filter = {};
+    if (resolvedCreatedBy) filter.createdBy = resolvedCreatedBy;
+    if (mobile) filter.mobile = mobile;
+
+    const list = (await ServiceAppointment.find(filter))
+      .sort({ createdAt: -1 })
+      .lean();
+    return res.json({
+      success: true,
+      data: list,
+    });
+  } catch (err) {
+    console.error("getServiceAppointmentByPatient unexpected:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
