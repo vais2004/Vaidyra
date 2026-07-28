@@ -482,7 +482,7 @@ export const getServiceAppointments = async (req, res) => {
 export const getServiceAppointmentById = async (req, res) => {
   try {
     const { id } = req.params;
-    const appt = await SerAppointment.findById(id).lean();
+    const appt = await ServiceAppointment.findById(id).lean();
 
     if (!appt)
       return res.status(404).json({
@@ -684,4 +684,15 @@ export const getServiceAppointmentByPatient = async (req, res) => {
     console.error("getServiceAppointmentByPatient unexpected:", err);
     return res.status(500).json({ success: false, message: "Server error" });
   }
+};
+
+export default {
+  createServiceAppointment,
+  confirmServicePayment,
+  getServiceAppointments,
+  getServiceAppointmentById,
+  updateServiceAppointment,
+  cancelServiceAppointment,
+  getServiceAppointmentStats,
+  getServiceAppointmentByPatient,
 };
