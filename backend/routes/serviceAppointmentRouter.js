@@ -25,7 +25,8 @@ serviceAppointmentRouter.post(
 );
 serviceAppointmentRouter.get(
   "/me",
-  clerkMiddleware().requireAuth(),
+  clerkMiddleware(),
+  requireAuth(),
   getServiceAppointmentByPatient,
 );
 serviceAppointmentRouter.get("/:id", getServiceAppointmentById);
