@@ -313,6 +313,52 @@ export const DashboardPage = () => {
                   <th className={s.tableHeaderCell}>Total Earnings</th>
                 </tr>
               </thead>
+              <tbody className={s.tableBody}>
+                {visibleDoctors.map((d, idx) => (
+                  <tr
+                    key={d.id}
+                    className={
+                      s.tableRow +
+                      " " +
+                      (idx % 2 === 0 ? s.tableRowEven : s.tableRowOdd)
+                    }>
+                    <td className={s.tableCell + " " + s.tableCellFlex}>
+                      <div className={s.verticalLine} />
+                      <img
+                        src={d.image}
+                        alt={d.name}
+                        className={s.doctorImage}
+                      />
+                      <div>
+                        <div className={s.doctorName}>{d.name}</div>
+                        <div className={s.doctorId}>ID: {d.id}</div>
+                      </div>
+                    </td>
+
+                    <td className={s.tableCell + " " + s.doctorSpecialization}>
+                      {d.specialization}
+                    </td>
+
+                    <td className={s.tableCell + " " + s.feeText}>₹ {d.fee}</td>
+
+                    <td className={s.tableCell + " " + s.appointmentsText}>
+                      {d.appointments.total}
+                    </td>
+
+                    <td className={s.tableCell + " " + s.completedText}>
+                      {d.appointments.completed}
+                    </td>
+
+                    <td className={s.tableCell + " " + s.canceledText}>
+                      {d.appointments.canceled}
+                    </td>
+
+                    <td className={s.tableCell + " " + s.earningsText}>
+                      ₹ {d.earnings.toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </div>
