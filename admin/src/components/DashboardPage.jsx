@@ -361,6 +361,13 @@ export const DashboardPage = () => {
               </tbody>
             </table>
           </div>
+          <div className={s.mobileDoctorContainer}>
+            <div className={s.mobileDoctorGrid}>
+              {visibleDoctors.map((d) => (
+                <MobileDoctorCard key={d.id} d={d} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -374,6 +381,31 @@ function StatCard({ icon, label, value }) {
         <div className={s.statIconContainer}>{icon}</div>
         <div className={s.statLabel}>{label}</div>
         <div className={s.statValue}>{value}</div>
+      </div>
+    </div>
+  );
+}
+
+function MobileDoctorCard({ d }) {
+  return (
+    <div className={s.mobileDoctorCard}>
+      <div className={s.mobileDoctorHeader}>
+        <div className="fles items-center gap-3">
+          <img src={d.image} alt={d.name} className={s.mobileDoctorImage} />
+          <div>
+            <div className={s.mobileDoctorName}>{d.name}</div>
+            <div className={s.mobileDoctorSpecialization}>
+              {d.specialization}
+            </div>
+          </div>
+        </div>
+        <div className={s.mobileDoctorFee}>₹ {d.fee} </div>
+      </div>
+      <div className={s.mobileStatsGrid}>
+        <div>
+          <div className={s.mobileStatLabel}>Appts</div>
+          <div className={s.mobileStatValue}>{d.appointments.total}</div>
+        </div>
       </div>
     </div>
   );
