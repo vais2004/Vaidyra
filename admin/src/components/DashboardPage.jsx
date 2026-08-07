@@ -406,6 +406,11 @@ function MobileDoctorCard({ d }) {
           <div className={s.mobileStatLabel}>Appts</div>
           <div className={s.mobileStatValue}>{d.appointments.total}</div>
         </div>
+
+        <div>
+          <div className={s.mobileStatLabel}>Done</div>
+          <div className={s.mobileStatValue+ " " + s.textEmerald600}>{d.appointments.completed}</div>
+        </div>
       </div>
     </div>
   );
