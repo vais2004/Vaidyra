@@ -368,6 +368,17 @@ export const DashboardPage = () => {
               ))}
             </div>
           </div>
+          {filteredDoctors.length > INITIAL_COUNT && (
+            <div className={s.showMoreContainer}>
+              <button
+                onClick={() => setShowAll((s) => !s)}
+                className={s.showMoreButton + " " + s.cursorPointer}>
+                {showAll
+                  ? "Show less"
+                  : `Show more (${filteredDoctors.length - INITIAL_COUNT})`}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -409,8 +420,21 @@ function MobileDoctorCard({ d }) {
 
         <div>
           <div className={s.mobileStatLabel}>Done</div>
-          <div className={s.mobileStatValue+ " " + s.textEmerald600}>{d.appointments.completed}</div>
+          <div className={s.mobileStatValue + " " + s.textEmerald600}>
+            {d.appointments.completed}
+          </div>
         </div>
+
+        <div>
+          <div className={s.mobileStatLabel}>Cancel</div>
+          <div className={s.mobileStatValue + " " + s.textRose500}>
+            {d.appointments.canceled}
+          </div>
+        </div>
+      </div>
+      <div className={s.mobileEarningsContainer}>
+        <div>Earned</div>
+        <div className="font-semibold">{d.earnings.toLocaleString()}</div>
       </div>
     </div>
   );
