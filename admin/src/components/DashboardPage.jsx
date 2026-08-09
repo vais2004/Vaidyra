@@ -401,7 +401,7 @@ function MobileDoctorCard({ d }) {
   return (
     <div className={s.mobileDoctorCard}>
       <div className={s.mobileDoctorHeader}>
-        <div className="fles items-center gap-3">
+        <div className="flex items-center gap-3">
           <img src={d.image} alt={d.name} className={s.mobileDoctorImage} />
           <div>
             <div className={s.mobileDoctorName}>{d.name}</div>
