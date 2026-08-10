@@ -308,7 +308,19 @@ const AddPage = () => {
       setLoading(false);
     }
   }
-  return <div>AddPage</div>;
+  return (
+    <div className={s.pageContainer}>
+      <div className={s.maxWidthContainerLg + " " + s.headerContainer}>
+        <div className={s.headerFlexContainer}>
+          <div className={s.headerIconContainer}>
+            <User className="text-white" size={32} />
+          </div>
+          <h1 className={s.headerTitle}>Add</h1>
+        </div>
+        <h1 className={s.headerTitle}>Add New Doctor</h1>
+      </div>
+    </div>
+  );
 };
 
 export default AddPage;
