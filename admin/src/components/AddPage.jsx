@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { doctorDetailStyles as s } from "../assets/dummyStyles";
 
 //HELPER FUNCTIONS
@@ -318,6 +318,32 @@ const AddPage = () => {
           <h1 className={s.headerTitle}>Add</h1>
         </div>
         <h1 className={s.headerTitle}>Add New Doctor</h1>
+      </div>
+      <div className={s.maxWidthContainer + " " + s.formContainer}>
+        <form onSubmit={handleAdd} className={s.formGrid}>
+          <div className="md:col-span-2">
+            <label className={s.label}>Upload Profile Image</label>
+            <div className="flex flex-warap items-center gap-4">
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/*"
+                onChange={handleImage}
+                className={s.fileInput}
+              />
+
+              {form.imagePreview && (
+                <div className="relative group">
+                  <img
+                    src={form.imagePreview}
+                    alt="preview"
+                    className={s.imagePreview}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );
