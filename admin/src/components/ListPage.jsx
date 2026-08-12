@@ -134,6 +134,28 @@ const ListPage = () => {
     fetchDoctors();
   }, []);
 
+  //to filter doctors
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    let list = doctors;
+    if (filterStatus === "available") {
+      list = list.filter(
+        (d) => (d.availability || "").toString().toLowerCase() === "available",
+      );
+    } else if (filterStatus === "unavailable") {
+      list = list.filter(
+        (d) => (d.availability || "").toString().toLowerCase() !== "available",
+      );
+    }
+    if (!q) return list;
+    return list.filter((d) => {
+      return (
+        (d.name || "").toLowerCase().includes(q) ||
+        (d.specialization || "").toLowerCase().includes(q)
+      );
+    });
+  }, [doctors, query, filterStatus]);
+
   return <div>ListPage</div>;
 };
 
