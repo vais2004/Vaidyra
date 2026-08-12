@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { doctorListStyles as s } from "../assets/dummyStyles";
+import { User } from "lucide-react";
 
 //HELPER FUNCTIONS
 // this function will give you output as DD-MM-YYYY
@@ -197,7 +198,19 @@ const ListPage = () => {
     setShowAll(false);
   }
 
-  return <div>ListPage</div>;
+  return (
+    <div className={s.container}>
+      <header className={s.headerContainer}>
+        <div className={s.headerTopSection}>
+          <div className={s.headerContainer}>
+            <div className={s.headerIcon}>
+              <User size={20} className={s.headerIconSvg} />
+            </div>
+          </div>
+        </div>
+      </header>
+    </div>
+  );
 };
 
 export default ListPage;
