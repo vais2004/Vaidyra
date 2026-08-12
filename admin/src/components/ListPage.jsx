@@ -166,6 +166,36 @@ const ListPage = () => {
     setExpanded((prev) => (prev === id ? null : id));
   }
 
+  //to delete any doctor
+  async function removeDoctor(id) {
+    const doc = doctors.find((d) => (d._id || d.id) === id);
+    if (!doc) return;
+    const ok = window.confirm(`Delete ${doc.name}? This cannot be undone.`);
+    if (!ok) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/doctors/${id}`, {
+        method: "DELETE",
+      });
+      const body = await res.json().catch(() => null);
+      if (!res.ok) {
+        alert(body?.message || "Failed to delete");
+        return;
+      }
+      setDoctors((prev) => prev.filter((p) => (p._id || p.id) !== id));
+      if (expanded === id) setExpanded(null);
+    } catch (err) {
+      console.error("delete error", err);
+      alert("Network error deleting doctor");
+    }
+  }
+
+  function applyStatusFilter(status) {
+    setFilterStatus((prev) => (prev === status ? "all" : status));
+    setExpanded(null);
+    setShowAll(false);
+  }
+
   return <div>ListPage</div>;
 };
 
