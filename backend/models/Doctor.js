@@ -23,7 +23,7 @@ const doctorSchema = new mongoose.Schema(
     imageUrl: { type: String, default: null },
     imagePublicId: { type: String, default: null },
     experience: { type: String, default: "" },
-    qualification: { type: String, default: "" },
+    qualifications: { type: String, default: "" },
     location: { type: String, default: "" },
     about: { type: String, default: "" },
     fee: { type: Number, default: 0 },
