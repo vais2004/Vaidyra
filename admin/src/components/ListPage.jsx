@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { doctorListStyles as s } from "../assets/dummyStyles";
-import { User } from "lucide-react";
+import { Search, User } from "lucide-react";
 
 //HELPER FUNCTIONS
 // this function will give you output as DD-MM-YYYY
@@ -212,6 +212,27 @@ const ListPage = () => {
                 Search by name or specialization
               </p>
             </div>
+          </div>
+          <div className={s.headerSearchContainer}>
+            <div className={s.searchBox}>
+              <Search size={16} className={s.searchIcon} />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search Doctors, specialization"
+                className={s.searchInput}
+              />
+            </div>
+            <button
+              onClick={() => {
+                setQuery("");
+                setExpanded(null);
+                setShowAll(false);
+                setFilterStatus("all");
+              }}
+              className={s.clearButton}>
+              Clear
+            </button>
           </div>
         </div>
       </header>
