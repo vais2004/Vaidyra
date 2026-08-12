@@ -235,6 +235,18 @@ const ListPage = () => {
             </button>
           </div>
         </div>
+        <div className={s.filterContainer}>
+          <button
+            onClick={() => applyStatusFilter("available")}
+            className={s.filterButton(filterStatus === "available", "emerald")}>
+            Available
+          </button>
+          <button
+            onClick={() => applyStatusFilter("unavailable")}
+            className={s.filterButton(filterStatus === "unavailable", "red")}>
+            Unavailable
+          </button>
+        </div>
       </header>
     </div>
   );
