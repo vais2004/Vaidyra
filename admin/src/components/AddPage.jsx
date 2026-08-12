@@ -594,6 +594,30 @@ const AddPage = () => {
           <span>{toast.message}</span>
         </div>
       )}
+      {/**Simple overview of added doc */}
+      <div className={s.doctorListContainer}>
+        {doctorList.length ? (
+          <div className={s.doctorListGrid}>
+            {doctorList.map((d) => (
+              <div key={d.id || d._id} className={s.doctorCard}>
+                <div className={s.doctorCardContent}>
+                  <img
+                    src={d.imageUrl || d.imagePreview}
+                    alt={d.name}
+                    className={s.doctorImage}
+                  />
+                  <div className={s.doctorName}>{d.name}</div>
+                  <div className={s.doctorSpecialization}>
+                    {d.specialization}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className={s.emptyState}>No Doctor Yet</p>
+        )}
+      </div>
     </div>
   );
 };
