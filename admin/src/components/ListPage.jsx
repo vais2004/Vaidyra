@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { doctorListStyles as s } from "../assets/dummyStyles";
 
 //HELPER FUNCTIONS
+// this function will give you output as DD-MM-YYYY
 function formatDateISO(iso) {
   if (!iso || typeof iso !== "string") return iso;
   const parts = iso.split("-");
@@ -27,6 +28,7 @@ function formatDateISO(iso) {
   return `${day} ${month} ${y}`;
 }
 
+//it will normalize any date-like string
 function normalizeToDateString(d) {
   if (!d) return null;
   const dt = new Date(d);
@@ -34,6 +36,8 @@ function normalizeToDateString(d) {
   return dt.toISOString().split("T")[0];
 }
 
+//this function will normalize schedule map: ex- "YYYY-MM-DD" : [slot1,slot2,.....]
+//also converts slots to array slots
 function buildScheduleMap(schedule) {
   const map = {};
   if (!schedule || typeof schedule !== "object") return map;
@@ -44,6 +48,8 @@ function buildScheduleMap(schedule) {
   return map;
 }
 
+//this function gives past dates first
+//that is nearest date comes first
 function getSortedScheduleDates(scheduleLike) {
   let keys = [];
   if (Array.isArray(scheduleLike)) {
@@ -71,6 +77,63 @@ function getSortedScheduleDates(scheduleLike) {
 }
 
 const ListPage = () => {
+  const API_BASE = "http://localhost:4000";
+
+  const [doctors, setDoctors] = useState([]);
+  const [expanded, setExpanded] = useState(null);
+  const [query, setQuery] = useState("");
+  const [showAll, setShowAll] = useState(false);
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [loading, setLoading] = useState(false);
+
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
+  useEffect(() => {
+    function onResize() {
+      if (typeof window === "undefined") return;
+      setIsMobileScreen(window.innerWidth < 640);
+    }
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  //to fetch doctors from server
+  async function fetchDoctors() {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/doctors`);
+      const body = await res.json().catch(() => null);
+
+      if (res.ok && body && body.success) {
+        const list = Array.isArray(body.data)
+          ? body.data
+          : Array.isArray(body.doctors)
+            ? body.doctors
+            : [];
+        const normalized = list.map((d) => {
+          const scheduleMap = buildScheduleMap(d.schedule || {});
+          return {
+            ...d,
+            schedule: scheduleMap,
+          };
+        });
+        setDoctors(normalized);
+      } else {
+        console.error("Failed to fetch doctors", { status: res.status, body });
+        setDoctors([]);
+      }
+    } catch (err) {
+      console.error("Network error fetching doctors", err);
+      setDoctors([]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
+
   return <div>ListPage</div>;
 };
 
