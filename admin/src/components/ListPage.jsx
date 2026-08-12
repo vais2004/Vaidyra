@@ -190,6 +190,7 @@ const ListPage = () => {
     }
   }
 
+  //shows all doctor or the filtered ones
   function applyStatusFilter(status) {
     setFilterStatus((prev) => (prev === status ? "all" : status));
     setExpanded(null);
