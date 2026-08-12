@@ -202,9 +202,15 @@ const ListPage = () => {
     <div className={s.container}>
       <header className={s.headerContainer}>
         <div className={s.headerTopSection}>
-          <div className={s.headerContainer}>
+          <div className={s.headerIconContainer}>
             <div className={s.headerIcon}>
               <User size={20} className={s.headerIconSvg} />
+            </div>
+            <div>
+              <h1 className={s.headerTitle}>Find a Doctor</h1>
+              <p className={s.headerSubtitle}>
+                Search by name or specialization
+              </p>
             </div>
           </div>
         </div>
