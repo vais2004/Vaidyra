@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { doctorDetailStyles as s } from "../assets/dummyStyles";
+import { User, XCircle } from "lucide-react";
 
 //HELPER FUNCTIONS
 //this function will give output in minutes and according to the it will manage am:pm
@@ -11,8 +12,7 @@ function timeStringToMinutes(t) {
   if (ampm === "AM" && h === 12) h = 0;
   return h * 60 + m;
 }
-
-//this function will convert (YYYY-MM_DD) to Date month year
+//this function will convert (YYYY-MM-DD) to Date month year
 function formatDateISO(iso) {
   if (!iso) return "";
   const [y, m, d] = iso.split("-");
@@ -75,7 +75,7 @@ const AddPage = () => {
   //compute today's date in local timezone
   const [today] = useState(() => {
     const d = new Date();
-    const tzOffset = getTimezoneOffset();
+    const tzOffset = d.getTimezoneOffset();
     const local = new Date(d.getTime() - tzOffset * 60000);
     return local.toISOString().split("T")[0];
   });
@@ -126,7 +126,7 @@ const AddPage = () => {
       showToast("error", "Select date + time");
       return;
     }
-    //prevent pst dates
+    //prevent past dates
     if (slotDate < today) {
       showToast("error", "Cannot add a slot in the past");
       return;
@@ -323,7 +323,7 @@ const AddPage = () => {
         <form onSubmit={handleAdd} className={s.formGrid}>
           <div className="md:col-span-2">
             <label className={s.label}>Upload Profile Image</label>
-            <div className="flex flex-warap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               <input
                 type="file"
                 ref={fileInputRef}
@@ -339,10 +339,56 @@ const AddPage = () => {
                     alt="preview"
                     className={s.imagePreview}
                   />
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className={s.removeImageButton + " " + s.cursorPointer}>
+                    <XCircle size={14} />
+                  </button>
                 </div>
               )}
             </div>
           </div>
+          <input
+            className={s.inputBase}
+            placeholder="Full Name"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
+          <input
+            className={s.inputBase}
+            placeholder="Specialization"
+            value={form.specialization}
+            onChange={(e) =>
+              setForm({ ...form, specialization: e.target.value })
+            }
+          />
+          <input
+            className={s.inputBase}
+            placeholder="Location"
+            value={form.location}
+            onChange={(e) => setForm({ ...form, location: e.target.value })}
+          />
+          <input
+            className={s.inputBase}
+            placeholder="Experience"
+            value={form.experience}
+            onChange={(e) => setForm({ ...form, experience: e.target.value })}
+          />
+          <input
+            className={s.inputBase}
+            placeholder="Qualifications"
+            value={form.qualifications}
+            onChange={(e) =>
+              setForm({ ...form, qualifications: e.target.value })
+            }
+          />
+          <input
+            className={s.inputBase}
+            placeholder="Consultation Fee"
+            value={form.fee}
+            onChange={(e) => setForm({ ...form, fee: e.target.value })}
+          />
         </form>
       </div>
     </div>
