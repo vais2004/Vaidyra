@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { doctorListStyles as s } from "../assets/dummyStyles";
 
 //HELPER FUNCTIONS
@@ -155,6 +155,16 @@ const ListPage = () => {
       );
     });
   }, [doctors, query, filterStatus]);
+
+  //show doctor according to filter
+  const displayed = useMemo(() => {
+    if (showAll) return filtered;
+    return filtered.slice(0, 6);
+  }, [filtered, showAll]);
+
+  function toggle(id) {
+    setExpanded((prev) => (prev === id ? null : id));
+  }
 
   return <div>ListPage</div>;
 };
