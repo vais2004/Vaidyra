@@ -482,7 +482,7 @@ const AddPage = () => {
             <option value="Unavailable">Unavailable</option>
           </select>
           <textarea
-            className={s.textareaBase + "md:col-span-2"}
+            className={s.textareaBase + " md:col-span-2"}
             rows={3}
             placeholder="About Doctor"
             value={form.about}
