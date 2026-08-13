@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { doctorListStyles as s } from "../assets/dummyStyles";
-import { Search, User } from "lucide-react";
+import { EyeClosed, Search, Star, Trash2, User, Users } from "lucide-react";
 
 //HELPER FUNCTIONS
 // this function will give you output as DD-MM-YYYY
@@ -248,6 +248,80 @@ const ListPage = () => {
           </button>
         </div>
       </header>
+
+      <main className={s.gridContainer}>
+        {loading && (
+          <div className={s.loadingContainer}>Loading Doctors...</div>
+        )}
+        {!loading && filtered.length === 0 && (
+          <div className={s.noResultsContainer}>
+            No doctors match your search
+          </div>
+        )}
+        {displayed.map((doc) => {
+          const id = doc._id || doc.id;
+          const isOpen = expanded === id;
+          const isAvailable = doc.availability === "Available";
+
+          const scheduleMap = buildScheduleMap(doc.schedule || {});
+          const sortedData = getSortedScheduleDates(scheduleMap);
+
+          return (
+            <article key={id} className={s.article}>
+              <div className={s.articleContent}>
+                <img
+                  src={doc.imageUrl || doc.image || ""}
+                  alt={doc.name}
+                  className={s.doctorImage}
+                />
+                <div className={s.doctorInfoContainer}>
+                  <div className={s.doctorHeader}>
+                    <div className="min-w-0 w-full">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className={s.doctorName}>{doc.name}</h3>
+                        <span className={s.availabilityBadge(isAvailable)}>
+                          <span className={s.availabilityDot(isAvailable)} />
+                          {isAvailable ? "Available" : "Unavailable"}
+                        </span>
+                      </div>
+                      <div className={s.doctorDetails}>
+                        {doc.specialization} • {doc.experience} year
+                      </div>
+                    </div>
+                    <div className={s.ratingContainer}>
+                      <div className={s.rating}>
+                        <Star size={14} />
+                        {doc.rating}
+                      </div>
+                      <button
+                        onClick={() => toggle(id)}
+                        className={s.toggleButton(isOpen)}>
+                        <EyeClosed size={18} />
+                      </button>
+                    </div>
+                  </div>
+                  <div className={s.statsContainer}>
+                    <div className={s.statsLabel}>Patients</div>
+                    <div className={s.statsValue}>
+                      <Users size={14} /> {doc.patients}
+                    </div>
+                    <div className={s.actionContainer}>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => removeDoctor(id)}
+                          className={s.deleteButton}>
+                          <Trash2 size={14} />
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </main>
     </div>
   );
 };
