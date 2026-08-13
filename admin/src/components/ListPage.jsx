@@ -1,6 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { doctorListStyles as s } from "../assets/dummyStyles";
-import { EyeClosed, Search, Star, Trash2, User, Users } from "lucide-react";
+import {
+  BadgeIndianRupee,
+  EyeClosed,
+  Search,
+  Star,
+  Trash2,
+  User,
+  Users,
+} from "lucide-react";
 
 //HELPER FUNCTIONS
 // this function will give you output as DD-MM-YYYY
@@ -313,6 +321,11 @@ const ListPage = () => {
                           <Trash2 size={14} />
                           Delete
                         </button>
+                        <div className={s.feesLabel}>Fees:</div>
+                        <div className={s.feesValue}>
+                          <BadgeIndianRupee />
+                          {doc.fee}
+                        </div>
                       </div>
                     </div>
                   </div>
