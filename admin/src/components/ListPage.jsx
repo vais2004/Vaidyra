@@ -396,6 +396,15 @@ const ListPage = () => {
             </article>
           );
         })}
+        {filtered.length > 6 && (
+          <div className={s.showMoreContainer}>
+            <button
+              onClick={() => setShowAll((s) => !s)}
+              className={s.showMoreButton}>
+              {showAll ? "Show Less" : `Show more (${filtered.length - 4})`}
+            </button>
+          </div>
+        )}
       </main>
     </div>
   );
