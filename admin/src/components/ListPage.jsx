@@ -272,7 +272,7 @@ const ListPage = () => {
           const isAvailable = doc.availability === "Available";
 
           const scheduleMap = buildScheduleMap(doc.schedule || {});
-          const sortedData = getSortedScheduleDates(scheduleMap);
+          const sortedDates = getSortedScheduleDates(scheduleMap);
 
           return (
             <article key={id} className={s.article}>
@@ -330,6 +330,68 @@ const ListPage = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+              {/**after expand is done */}
+              <div
+                className={s.expandableContent}
+                style={{
+                  maxHeight: isOpen ? (isMobileScreen ? 320 : 600) : 0,
+                  transition:
+                    "max-height 420ms cubic-bezier(.2,.9,.2,1), padding 220ms ease",
+                  paddingTop: isOpen ? 16 : 0,
+                  paddingBottom: isOpen ? 16 : 0,
+                }}>
+                {isOpen && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className={s.aboutSection}>
+                      <h4 className={s.aboutHeading}>About</h4>
+                      <p className={s.aboutText}>{doc.about}</p>
+
+                      <div className="mt-4">
+                        <div className={s.qualificationsHeading}>
+                          Qualifications
+                        </div>
+                        <div className={s.qualificationsText}>
+                          {doc.qualifications}
+                        </div>
+                      </div>
+
+                      <div className="mt-4">
+                        <div className={s.scheduleHeading}>Schedule</div>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {sortedDates.map((date) => {
+                            const slots = scheduleMap[date] || [];
+                            return (
+                              <div key={date} className="min-w-full md:min-w-0">
+                                <div className={s.scheduleDate}>
+                                  {formatDateISO(date)}
+                                </div>
+                                <div className="mt-1 flex flex-wrap gap-2">
+                                  {slots.map((slot, i) => (
+                                    <span key={i} className={slot.scheduleSlot}>
+                                      {slot}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
+                    <aside className={s.statsSidebar}>
+                      <div className={s.statsItemHeading}>Success</div>
+                      <div className={s.statsItemValue}>{doc.success}%</div>
+
+                      <div className={s.statsItemHeading}>Patients</div>
+                      <div className={s.statsItemValue}>{doc.patients}</div>
+
+                      <div className={s.statsItemHeading}>Location</div>
+                      <div className={s.locationValue}>{doc.location}</div>
+                    </aside>
+                  </div>
+                )}
               </div>
             </article>
           );
