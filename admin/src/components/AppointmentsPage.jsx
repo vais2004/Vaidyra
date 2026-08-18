@@ -8,6 +8,8 @@ import {
 const API_BASE = "http://localhost:4000";
 
 //HELPERS FUNCTION
+
+//this function returns the date as 22 Jan 2026
 function formatDateISO(iso) {
   try {
     const d = new Date(iso + "T00:00:00");
@@ -21,6 +23,7 @@ function formatDateISO(iso) {
   }
 }
 
+//this function takes slot with date time and returns a date obj
 function dateTimeFromSlot(slot) {
   try {
     const [y, m, d] = slot.date.split("-");
@@ -38,7 +41,21 @@ function dateTimeFromSlot(slot) {
 }
 
 const AppointmentsPage = () => {
-  return <div>AppointmentsPage</div>;
+  const isAdmin = true; //as the admin is logged in and is Major Admin for response send by him.
+
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const [query, setQuery] = useState("");
+  const [filterDate, setFilterDate] = useState("");
+  const [filterSpeciality, setFilterSpeciality] = useState("all");
+  const [showAll, setShowAll] = useState(false);
+  return (
+    <div>
+      <div></div>
+    </div>
+  );
 };
 
 export default AppointmentsPage;
