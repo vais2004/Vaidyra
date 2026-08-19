@@ -4,6 +4,7 @@ import {
   statusClasses,
   keyframesStyles,
 } from "../assets/dummyStyles";
+import { Search } from "lucide-react";
 
 const API_BASE = "http://localhost:4000";
 
@@ -94,7 +95,7 @@ const AppointmentsPage = () => {
             raw: a, // keep original in case we need it
           };
         });
-        setAppointments(items);
+        setAppointments(items); //fetch all the details present on the DB
       } catch (err) {
         console.error("Load appointments error:", err);
         setError(err.message || "Failed to load appointments");
@@ -105,11 +106,13 @@ const AppointmentsPage = () => {
     load();
   }, []);
 
+  //compute available specialities from fetched appointments
   const specialities = useMemo(() => {
     const set = new Set(appointments.map((a) => a.speciality || "General"));
     return ["all", ...Array.from(set)];
   }, [appointments]);
 
+  //filter by speciality, data & query
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return appointments.filter((a) => {
@@ -129,6 +132,7 @@ const AppointmentsPage = () => {
     });
   }, [appointments, query, filterDate, filterSpeciality]);
 
+  //sort filtered by dateTime in descending order
   const sortedFiltered = useMemo(() => {
     return filtered.slice().sort((a, b) => {
       const da = dateTimeFromSlot(a.slot).getTime();
@@ -137,15 +141,101 @@ const AppointmentsPage = () => {
     });
   }, [filtered]);
 
+  //display all the appt or the filtered ends
   const displayed = useMemo(
     () => (showAll ? sortedFiltered : sortedFiltered.slice(0, 8)),
     [sortedFiltered, showAll],
   );
 
+  //if admin want to cancel appt
+  async function adminCancelAppointment(id) {
+    const appt = appointments.find((x) => x.id === id);
+    if (!appt) return;
+
+    const statusLower = (appt.status || "").toLowerCase();
+    const isCancelled =
+      statusLower === "canceled" || statusLower === "cancelled";
+    const isCompleted = statusLower === "completed";
+
+    //don't allow cancel or complete to be overdone
+    if (isCancelled || isCompleted) return;
+
+    const ok = window.confirm(
+      `As admin, mark appointment for ${appt.patientName} with ${
+        appt.doctorName
+      } on ${formatDateISO(appt.slot.date)} at ${appt.slot.time} as CANCELLED?`,
+    );
+    if (!ok) return;
+
+    try {
+      setAppointments((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, status: "Canceled" } : p)),
+      );
+      setShowAll(true);
+
+      const res = await fetch(`${API_BASE}/api/appointments/${id}/cancel`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.message || `Cancel failed (${res.status})`);
+      }
+      const data = await res.json();
+      const updated = data?.appointment || data?.appointments || null;
+      if (updated) {
+        setAppointments((prev) =>
+          prev.map((p) =>
+            p.id === id
+              ? {
+                  ...p,
+                  status: updated.status || "Canceled",
+                  slot: {
+                    date: updated.date || p.slot.date,
+                    time: updated.time || p.slot.time,
+                  },
+                  raw: updated,
+                }
+              : p,
+          ),
+        );
+      }
+    } catch (err) {
+      console.error("Cancel error:", err);
+      setError(err.message || "Failed to cancel appointment");
+      try {
+        const reload = await fetch(`${API_BASE}/api/appointments?limit=200`);
+        if (reload.ok) {
+          const body = await reload.json();
+          const items = (body?.appointments || []).map((a) => ({
+            id: a._id || a.id,
+            patientName: a.patientName || "",
+            age: a.age || "",
+            gender: a.gender || "",
+            mobile: a.mobile || "",
+            doctorName: (a.doctorId && a.doctorId.name) || a.doctorName || "",
+            speciality:
+              (a.doctorId && a.doctorId.specialization) ||
+              a.speciality ||
+              a.specialization ||
+              "General",
+            fee: typeof a.fees === "number" ? a.fees : a.fee || 0,
+            slot: {
+              date: a.date || (a.slot && a.slot.date) || "",
+              time: a.time || (a.slot && a.slot.time) || "00:00 AM",
+            },
+            status: a.status || (a.payment && a.payment.status) || "Pending",
+            raw: a,
+          }));
+          setAppointments(items);
+        }
+      } catch (e) {
+        //ignore any errors if occured
+      }
+    }
+  }
   return (
-    <div>
-      <div></div>
-    </div>
+   <></>
   );
 };
 
