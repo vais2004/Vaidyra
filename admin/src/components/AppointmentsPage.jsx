@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   pageStyles,
   statusClasses,
@@ -51,6 +51,97 @@ const AppointmentsPage = () => {
   const [filterDate, setFilterDate] = useState("");
   const [filterSpeciality, setFilterSpeciality] = useState("all");
   const [showAll, setShowAll] = useState(false);
+
+  //fetch list from server
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        const q = query.trim();
+        const url = `${API_BASE}/api/appointments?limit=200${
+          q ? `&search=${encodeURIComponent(q)}` : ""
+        }`;
+        const res = await fetch(url);
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          throw new Error(body?.message || `Failed to fetch (${res.status})`);
+        }
+        const data = await res.json();
+        const items = (data?.appointments || []).map((a) => {
+          const doctorName =
+            (a.doctorId && a.doctorId.name) || a.doctorName || "";
+          const speciality =
+            (a.doctorId && a.doctorId.specialization) ||
+            a.speciality ||
+            a.specialization ||
+            "General";
+          const fee = typeof a.fees === "number" ? a.fees : a.fee || 0;
+          return {
+            id: a._id || a.id,
+            patientName: a.patientName || "",
+            age: a.age || "",
+            gender: a.gender || "",
+            mobile: a.mobile || "",
+            doctorName,
+            speciality,
+            fee,
+            slot: {
+              date: a.date || (a.slot && a.slot.date) || "",
+              time: a.time || (a.slot && a.slot.time) || "00:00 AM",
+            },
+            status: a.status || (a.payment && a.payment.status) || "Pending",
+            raw: a, // keep original in case we need it
+          };
+        });
+        setAppointments(items);
+      } catch (err) {
+        console.error("Load appointments error:", err);
+        setError(err.message || "Failed to load appointments");
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  const specialities = useMemo(() => {
+    const set = new Set(appointments.map((a) => a.speciality || "General"));
+    return ["all", ...Array.from(set)];
+  }, [appointments]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return appointments.filter((a) => {
+      if (
+        filterSpeciality !== "all" &&
+        (a.speciality || "").toLowerCase() !== filterSpeciality.toLowerCase()
+      )
+        return false;
+      if (filterDate && a.slot?.date !== filterDate) return false;
+      if (!q) return true;
+      return (
+        (a.doctorName || "").toLowerCase().includes(q) ||
+        (a.speciality || "").toLowerCase().includes(q) ||
+        (a.patientName || "").toLowerCase().includes(q) ||
+        (a.mobile || "").toLowerCase().includes(q)
+      );
+    });
+  }, [appointments, query, filterDate, filterSpeciality]);
+
+  const sortedFiltered = useMemo(() => {
+    return filtered.slice().sort((a, b) => {
+      const da = dateTimeFromSlot(a.slot).getTime();
+      const db = dateTimeFromSlot(b.slot).getTime();
+      return db - da;
+    });
+  }, [filtered]);
+
+  const displayed = useMemo(
+    () => (showAll ? sortedFiltered : sortedFiltered.slice(0, 8)),
+    [sortedFiltered, showAll],
+  );
+
   return (
     <div>
       <div></div>
