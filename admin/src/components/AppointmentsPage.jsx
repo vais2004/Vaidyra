@@ -8,7 +8,7 @@ import { BadgeIndianRupee, Calendar, Search } from "lucide-react";
 
 const API_BASE = "http://localhost:4000";
 
-//HELPERS FUNCTION
+//HELPER FUNCTIONS
 
 //this function returns the date as 22 Jan 2026
 function formatDateISO(iso) {
@@ -304,7 +304,7 @@ const AppointmentsPage = () => {
             {displayed.map((a, idx) => {
               const statusLower = (a.status || "").toLowerCase();
               const isCancelled =
-                statusLower === "canceled" || statusLower === "canceled";
+                statusLower === "canceled" || statusLower === "cancelled";
               const isCompleted = statusLower === "completed";
               const isDisabled = isCancelled || isCompleted;
 
@@ -329,7 +329,7 @@ const AppointmentsPage = () => {
                           <span> {a.age ? ":" : ""} </span>
                           <span>{a.gender}</span>
                           <span className="hidden md:inline"> : </span>
-                          <span className=" max-w-[120px]">{a.mobile}</span>
+                          <span className="max-w-30">{a.mobile}</span>
                         </div>
                       </div>
 
@@ -393,6 +393,17 @@ const AppointmentsPage = () => {
               );
             })}
           </main>
+        )}
+        {sortedFiltered.length > 8 && (
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={() => setShowAll((s) => !s)}
+              className={pageStyles.showMoreButton}>
+              {showAll
+                ? "Show Less"
+                : `Show more (${sortedFiltered.length - 8})`}
+            </button>
+          </div>
         )}
       </div>
     </div>
