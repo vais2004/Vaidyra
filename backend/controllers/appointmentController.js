@@ -80,7 +80,7 @@ export const getAppointments = async (req, res) => {
       const re = new RegExp(search, "i");
       filter.$or = [{ patientName: re }, { mobile: re }, { notes: re }];
     }
-    const items = (await Appointment.find(filter))
+    const items = await Appointment.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -615,7 +615,7 @@ export const getAppointmentsByDoctor = async (req, res) => {
       const re = new RegExp(search, "i");
       filter.$or = [{ patientName: re }, { mobile: re }, { notes: re }];
     }
-    const items = (await Appointment.find(filter))
+    const items = await Appointment.find(filter)
       .sort({ date: 1, time: 1 })
       .skip(skip)
       .limit(limit)
