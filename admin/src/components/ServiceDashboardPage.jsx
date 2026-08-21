@@ -48,7 +48,9 @@ function normalizeService(doc) {
 
 const API_BASE = "http://localhost:4000";
 
-export default function ServiceDashboardPage({ services: servicesProp = null }) {
+export default function ServiceDashboardPage({
+  services: servicesProp = null,
+}) {
   const [services, setServices] = useState(
     Array.isArray(servicesProp) ? servicesProp.map(normalizeService) : [],
   );
@@ -114,7 +116,6 @@ export default function ServiceDashboardPage({ services: servicesProp = null }) 
       console.error("Service fetch error:", err);
       if (mountedRef.current) {
         setError(err.message || "Failed to load services");
-
       }
     } finally {
       if (mountedRef.current && showLoading) setLoading(false);
@@ -131,7 +132,7 @@ export default function ServiceDashboardPage({ services: servicesProp = null }) 
     };
   }, []); //global helper to refresh the page and fetch the services again
 
-  //makes sure that service are present 
+  //makes sure that service are present
   useEffect(() => {
     mountedRef.current = true;
     if (Array.isArray(servicesProp)) {
@@ -162,7 +163,7 @@ export default function ServiceDashboardPage({ services: servicesProp = null }) 
     startPolling();
 
     //refresh the onFocus
-        function onFocus() {
+    function onFocus() {
       fetchServices({ showLoading: false });
     }
     window.addEventListener("focus", onFocus);
@@ -171,7 +172,6 @@ export default function ServiceDashboardPage({ services: servicesProp = null }) 
       fetchServices({ showLoading: false });
     }
     window.addEventListener("services:updated", onServicesUpdated);
-
 
     //refresh the localstorage
     function onStorage(e) {
@@ -182,7 +182,7 @@ export default function ServiceDashboardPage({ services: servicesProp = null }) 
     window.addEventListener("storage", onStorage);
 
     //also refresh the tab when its becomes visible
-        function onVisibilityChange() {
+    function onVisibilityChange() {
       if (document.visibilityState === "visible") {
         fetchServices({ showLoading: false });
       }
@@ -217,7 +217,7 @@ export default function ServiceDashboardPage({ services: servicesProp = null }) 
     ? filteredServices
     : filteredServices.slice(0, INITIAL_COUNT);
 
-    //stats
+  //stats
   const totals = useMemo(() => {
     return filteredServices.reduce(
       (acc, s) => {
@@ -242,12 +242,44 @@ export default function ServiceDashboardPage({ services: servicesProp = null }) 
     return `₹${Number(v || 0).toLocaleString()}`;
   }
 
-
   return (
-    <div>
-      <div></div>
+    <div className={serviceDashboardStyles.container}>
+      <div className={serviceDashboardStyles.innerContainer}>
+        {/* Header */}
+        <div className={serviceDashboardStyles.header.container}>
+          <div>
+            <h1 className={serviceDashboardStyles.header.title}>
+              Service Dashboard
+            </h1>
+            <p className={serviceDashboardStyles.header.subtitle}>
+              Overview of services, appointments and earnings
+            </p>
+          </div>
+          {/* refresh */}
+          <div className={serviceDashboardStyles.refresh.container}>
+            <div className={serviceDashboardStyles.refresh.countText}>
+              {loading
+                ? "Loading..."
+                : `${filteredServices.length} services ${filteredServices.length !== 1 ? "s" : ""}`}
+            </div>
+            <button
+              onClick={() => {
+                if (Array.isArray(servicesProp)) return;
+                fetchServices({ showLoading: true });
+              }}
+              className={serviceDashboardStyles.refresh.button(
+                Array.isArray(servicesProp),
+              )}
+              title={
+                Array.isArray(servicesProp)
+                  ? "Services provided by parent component"
+                  : "Refresh"
+              }>
+              Refresh
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default ServiceDashboardPage;
+}
