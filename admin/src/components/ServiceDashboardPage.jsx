@@ -5,6 +5,7 @@ import {
   Calendar,
   CheckCircle,
   ClipboardList,
+  Search,
   XCircle,
 } from "lucide-react";
 
@@ -312,6 +313,26 @@ export default function ServiceDashboardPage({
             label="Canceled"
             value={totals.totalCanceled}
           />
+        </div>
+        {/**Search bar */}
+        <div className={serviceDashboardStyles.search.container}>
+          <div className={serviceDashboardStyles.search.inputContainer}>
+            <Search size={16} className="text-emerald-700" />
+            <input
+              type="text"
+              placeholder="Search services..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={serviceDashboardStyles.search.input}
+            />
+            {searchQuery.length > 0 && (
+              <XCircle
+                size={16}
+                className="text-red-500 cursor-pointer"
+                onClick={() => setSearchQuery("")}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
