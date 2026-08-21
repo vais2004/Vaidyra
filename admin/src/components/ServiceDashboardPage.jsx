@@ -1,5 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { serviceDashboardStyles } from "../assets/dummyStyles";
+import {
+  BadgeIndianRupee,
+  Calendar,
+  CheckCircle,
+  ClipboardList,
+  XCircle,
+} from "lucide-react";
 
 //normalize the backend data that is coming from the DB
 function normalizeService(doc) {
@@ -279,6 +286,47 @@ export default function ServiceDashboardPage({
             </button>
           </div>
         </div>
+        <div className={serviceDashboardStyles.statGrid}>
+          <StatCard
+            icon={<ClipboardList size={18} />}
+            label="Total Services"
+            value={totals.totalServices}
+          />
+          <StatCard
+            icon={<Calendar size={18} />}
+            label="Total Appointments"
+            value={totals.totalAppointments}
+          />
+          <StatCard
+            icon={<BadgeIndianRupee size={18} />}
+            label="Total Earnings"
+            value={formatCurrency(totals.totalEarning)}
+          />
+          <StatCard
+            icon={<CheckCircle size={18} />}
+            label="Completed"
+            value={totals.totalCompleted}
+          />
+          <StatCard
+            icon={<XCircle size={18} />}
+            label="Canceled"
+            value={totals.totalCanceled}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ icon, label, value }) {
+  return (
+    <div className={serviceDashboardStyles.statCard.container}>
+      <div className={serviceDashboardStyles.statCard.iconContainer}>
+        {icon}
+      </div>
+      <div>
+        <div className={serviceDashboardStyles.statCard.label}>{label}</div>
+        <div className={serviceDashboardStyles.statCard.value}>{value}</div>
       </div>
     </div>
   );
