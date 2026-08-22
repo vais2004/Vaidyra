@@ -334,6 +334,111 @@ export default function ServiceDashboardPage({
             )}
           </div>
         </div>
+        {/* Table list */}
+        <div className={serviceDashboardStyles.table.container}>
+          {/* for tablet view */}
+          <div className={serviceDashboardStyles.table.headerMd}>
+            <div className={serviceDashboardStyles.table.headerText}>
+              Service
+            </div>
+            <div className={serviceDashboardStyles.table.headerText}>
+              Appointments
+            </div>
+            <div className={serviceDashboardStyles.table.headerText}>
+              Completed
+            </div>
+            <div className={serviceDashboardStyles.table.headerText}>
+              Canceled
+            </div>
+            <div className={serviceDashboardStyles.table.headerText}>
+              Earning
+            </div>
+          </div>
+          {/* for desktop view */}
+          <div className={serviceDashboardStyles.table.headerLg}>
+            <div className="col-span-5">Service</div>
+            <div className="col-span-2">Price</div>
+            <div className={serviceDashboardStyles.table.headerTextLg(1)}>
+              Appointments
+            </div>
+            <div className={serviceDashboardStyles.table.headerTextLg(1)}>
+              Completed
+            </div>
+            <div className={serviceDashboardStyles.table.headerTextLg(1)}>
+              Canceled
+            </div>
+            <div className="col-span-2 text-right">Earning</div>
+          </div>
+          <div className={serviceDashboardStyles.table.body}>
+            {loading ? (
+              <div className={serviceDashboardStyles.states.loading}>
+                Loading services...
+              </div>
+            ) : error ? (
+              <div className={serviceDashboardStyles.states.error}>
+                Error: {error}
+              </div>
+            ) : visibleServices.length === 0 ? (
+              <div className={serviceDashboardStyles.states.empty}>
+                No services found.
+              </div>
+            ) : (
+              visibleServices.map((s) => {
+                const earnings = s.completed * s.price;
+                return (
+                  <div key={s.id} className={serviceDashboardStyles.table.row}>
+                    {/* for tablet */}
+                    <div className={serviceDashboardStyles.table.tabletView}>
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={serviceDashboardStyles.table.tabletImage}>
+                          <img
+                            src={s.image}
+                            alt={s.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div
+                          className={
+                            serviceDashboardStyles.table.tabletTextContainer
+                          }>
+                          <div
+                            className={
+                              serviceDashboardStyles.table.tabletServiceName
+                            }>
+                            {s.name}
+                          </div>
+                          <div
+                            className={
+                              serviceDashboardStyles.table.tabletPrice
+                            }>
+                            {formatCurrency(s.price)}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className={serviceDashboardStyles.table.tabletCell}>
+                        {s.totalAppointments}
+                      </div>
+                      <div
+                        className={`${serviceDashboardStyles.table.tabletCell} text-emerald-700`}>
+                        {s.completed}
+                      </div>
+                      <div
+                        className={`${serviceDashboardStyles.table.tabletCell} text-red-500`}>
+                        {s.canceled}
+                      </div>
+                      <div
+                        className={`${serviceDashboardStyles.table.tabletCell} text-right`}>
+                        {formatCurrency(earning)}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
