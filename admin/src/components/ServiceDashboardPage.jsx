@@ -85,7 +85,7 @@ export default function ServiceDashboardPage({
     return opts;
   }
 
-  //fetch the service from the server side
+  // fetch services from the server side
   async function fetchServices({ showLoading = true } = {}) {
     if (fetchingRef.current) return;
     fetchingRef.current = true;
@@ -140,7 +140,7 @@ export default function ServiceDashboardPage({
     };
   }, []); //global helper to refresh the page and fetch the services again
 
-  //makes sure that service are present
+  // makes sure that services are present
   useEffect(() => {
     mountedRef.current = true;
     if (Array.isArray(servicesProp)) {
@@ -153,7 +153,7 @@ export default function ServiceDashboardPage({
 
     fetchServices({ showLoading: true });
 
-    //a polling while tab is visible
+    // polling while the tab is visible
     function startPolling() {
       if (pollHandleRef.current) return;
       pollHandleRef.current = setInterval(() => {
@@ -268,7 +268,7 @@ export default function ServiceDashboardPage({
             <div className={serviceDashboardStyles.refresh.countText}>
               {loading
                 ? "Loading..."
-                : `${filteredServices.length} services ${filteredServices.length !== 1 ? "s" : ""}`}
+                : `${filteredServices.length} service${filteredServices.length !== 1 ? "s" : ""}`}
             </div>
             <button
               onClick={() => {
@@ -561,6 +561,18 @@ export default function ServiceDashboardPage({
             )}
           </div>
         </div>
+        {/* show more/less toggle */}
+        {filteredServices.length > INITIAL_COUNT && (
+          <div className={serviceDashboardStyles.showMore.container}>
+            <button
+              onClick={() => setShowAll((s) => !s)}
+              className={serviceDashboardStyles.showMore.button}>
+              {showAll
+                ? "Show less"
+                : `Show more ${filteredServices.length - INITIAL_COUNT}`}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
