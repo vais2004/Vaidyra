@@ -233,7 +233,7 @@ export default function ServiceDashboardPage({
         acc.totalAppointments += s.totalAppointments;
         acc.totalCompleted += s.completed;
         acc.totalCanceled += s.canceled;
-        acc.totalEarning += s.completed * s.price;
+        acc.totalEarnings += s.completed * s.price;
         return acc;
       },
       {
@@ -241,7 +241,7 @@ export default function ServiceDashboardPage({
         totalAppointments: 0,
         totalCompleted: 0,
         totalCanceled: 0,
-        totalEarning: 0,
+        totalEarnings: 0,
       },
     );
   }, [filteredServices]);
@@ -301,7 +301,7 @@ export default function ServiceDashboardPage({
           <StatCard
             icon={<BadgeIndianRupee size={18} />}
             label="Total Earnings"
-            value={formatCurrency(totals.totalEarning)}
+            value={formatCurrency(totals.totalEarnings)}
           />
           <StatCard
             icon={<CheckCircle size={18} />}
@@ -351,7 +351,7 @@ export default function ServiceDashboardPage({
               Canceled
             </div>
             <div className={serviceDashboardStyles.table.headerText}>
-              Earning
+              Earnings
             </div>
           </div>
           {/* for desktop view */}
@@ -367,7 +367,7 @@ export default function ServiceDashboardPage({
             <div className={serviceDashboardStyles.table.headerTextLg(1)}>
               Canceled
             </div>
-            <div className="col-span-2 text-right">Earning</div>
+            <div className="col-span-2 text-right">Earnings</div>
           </div>
           <div className={serviceDashboardStyles.table.body}>
             {loading ? (
@@ -430,7 +430,54 @@ export default function ServiceDashboardPage({
                       </div>
                       <div
                         className={`${serviceDashboardStyles.table.tabletCell} text-right`}>
-                        {formatCurrency(earning)}
+                        {formatCurrency(earnings)}
+                      </div>
+                    </div>
+                    {/* for the desktop */}
+                    <div className={serviceDashboardStyles.table.desktopView}>
+                      <div className="col-span-5 flex items-center gap-4">
+                        <div
+                          className={serviceDashboardStyles.table.desktopImage}>
+                          <img
+                            src={s.image}
+                            alt={s.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <h3
+                          className={
+                            serviceDashboardStyles.table.desktopServiceName
+                          }>
+                          {s.name}
+                        </h3>
+                      </div>
+                      <div
+                        className={serviceDashboardStyles.table.desktopCell(2)}>
+                        {formatCurrency(s.price)}
+                      </div>
+                      <div
+                        className={serviceDashboardStyles.table.desktopCenterCell(
+                          1,
+                        )}>
+                        {s.totalAppointments}
+                      </div>
+                      <div
+                        className={serviceDashboardStyles.table.desktopCenterCell(
+                          1,
+                        )}>
+                        {s.completed}
+                      </div>
+                      <div
+                        className={serviceDashboardStyles.table.desktopCenterCell(
+                          1,
+                        )}>
+                        {s.canceled}
+                      </div>
+                      <div
+                        className={`${serviceDashboardStyles.table.desktopCell(
+                          2,
+                        )} text-right`}>
+                        {formatCurrency(earnings)}
                       </div>
                     </div>
                   </div>
