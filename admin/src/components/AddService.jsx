@@ -723,6 +723,7 @@ const AddService = ({ serviceId }) => {
           </div>
         </div>
       </form>
+      <style>{s.customCSS}</style>
     </div>
   );
 };
