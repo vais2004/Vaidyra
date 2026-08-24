@@ -71,7 +71,7 @@ const AddService = ({ serviceId }) => {
   const [toast, setToast] = useState(null);
   const [errors, setErrors] = useState({});
 
-  //compute the days for selected month/year (respection the month length)
+  //compute the days for selected month/year (respecting the month length)
   const selectedYearNum = Number(slotYear);
   const selectedMonthNum = Number(slotMonth);
   const daysInSelectedMonth = new Date(
@@ -83,7 +83,7 @@ const AddService = ({ serviceId }) => {
     String(i + 1),
   );
 
-  //user cant select previous year/month/date from today
+  //user can't select previous year/month/date from today
   useEffect(() => {
     if (Number(slotDay) > daysInSelectedMonth) {
       setSlotDay(String(daysInSelectedMonth));
@@ -139,7 +139,7 @@ const AddService = ({ serviceId }) => {
     return () => {
       mounted = false;
     };
-  }, [serviceId, API_BASE]); //pre fetch for that particular service if present
+  }, [serviceId, API_BASE]); //pre-fetch / fetch for that particular service if present
 
   //IMAGE CHANGE
   function handleImageChange(e) {
@@ -212,7 +212,7 @@ const AddService = ({ serviceId }) => {
     return new Date(y, m, d, h, mm, 0, 0);
   }
 
-  //to prevent user for selecting the past time for that particuler date
+  //to prevent user form selecting the past time for that particular date
   function isSelectedDateTimeInPast() {
     const sel = selectedDateTime();
     return sel.getTime() <= Date.now();
@@ -535,7 +535,7 @@ const AddService = ({ serviceId }) => {
             <div>
               <div className="flex items-center justify-between">
                 <label className={s.labels.standard}>
-                  Instructions (point wise)
+                  Instructions (point-wise)
                 </label>
                 <button
                   type="button"
