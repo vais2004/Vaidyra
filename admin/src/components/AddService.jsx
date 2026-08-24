@@ -462,6 +462,25 @@ const AddService = ({ serviceId }) => {
                   </button>
                 )}
               </div>
+              {hasExistingImage && (
+                <div className="w-full text-xs text-gray-600 mt-2 flex items-center gap-2">
+                  <input
+                    id="remove-img"
+                    type="checkbox"
+                    checked={removeImage}
+                    onChange={(e) => {
+                      setRemoveImage(Boolean(e.target.checked));
+                      if (e.target.checked) {
+                        setImagePreview(null);
+                        setImageFile(null);
+                        setHasExistingImage(false);
+                      }
+                    }}
+                    className="rounded"
+                  />
+                  <label htmlFor="remove-img">Remove existing image</label>
+                </div>
+              )}
             </div>
           </div>
         </div>
