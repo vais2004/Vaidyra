@@ -7,6 +7,7 @@ import {
   XCircle,
   Image,
   Plus,
+  Trash2,
 } from "lucide-react";
 
 const AddService = ({ serviceId }) => {
@@ -436,6 +437,30 @@ const AddService = ({ serviceId }) => {
                   <Plus className="w-4 h-4" />{" "}
                   {imagePreview ? "Replace Image" : "Upload Image"}
                 </button>
+
+                {(imagePreview || hasExistingImage) && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // If current preview is a blob URL, revoke it
+                      if (imagePreview && imagePreview.startsWith("blob:")) {
+                        try {
+                          URL.revokeObjectURL(imagePreview);
+                        } catch (err) {}
+                      }
+                      setImagePreview(null);
+                      setImageFile(null);
+                      // mark that user wants to remove the existing image
+                      if (hasExistingImage) {
+                        setRemoveImage(true);
+                        setHasExistingImage(false);
+                      }
+                      if (fileRef.current) fileRef.current.value = null;
+                    }}
+                    className={s.buttons.removeImage}>
+                    <Trash2 className="w-4 h-4 text-red-500" />
+                  </button>
+                )}
               </div>
             </div>
           </div>
