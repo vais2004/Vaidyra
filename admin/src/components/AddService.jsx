@@ -8,6 +8,7 @@ import {
   Image,
   Plus,
   Trash2,
+  Calendar,
 } from "lucide-react";
 
 const AddService = ({ serviceId }) => {
@@ -481,6 +482,243 @@ const AddService = ({ serviceId }) => {
                   <label htmlFor="remove-img">Remove existing image</label>
                 </div>
               )}
+            </div>
+          </div>
+          {/* right side */}
+          <div className="lg:col-span-2 md:col-span-1 col-span-1 space-y-6">
+            <div className={s.grids.formFields}>
+              <div>
+                <label className={s.labels.standard}>Service name</label>
+                <input
+                  value={serviceName}
+                  onChange={(e) => setServiceName(e.target.value)}
+                  placeholder="e.g. General Consultation"
+                  className={s.formFields.input(errors.serviceName)}
+                />
+              </div>
+
+              <div>
+                <label className={s.labels.standard}>Price</label>
+                <input
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder="₹ 499"
+                  className={s.formFields.input(errors.price)}
+                  inputMode="numeric"
+                />
+
+                <div className="mt-3">
+                  <label className={s.labels.standard}>Availability</label>
+                  <select
+                    value={availability}
+                    onChange={(e) => setAvailability(e.target.value)}
+                    className={s.formFields.select}>
+                    <option value="available">Available</option>
+                    <option value="unavailable">Unavailable</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className={s.labels.standard}>About this service</label>
+              <textarea
+                value={about}
+                onChange={(e) => setAbout(e.target.value)}
+                placeholder="Short description"
+                rows={4}
+                className={s.formFields.textarea(errors.about)}
+              />
+            </div>
+
+            {/* instructions */}
+            <div>
+              <div className="flex items-center justify-between">
+                <label className={s.labels.standard}>
+                  Instructions (point wise)
+                </label>
+                <button
+                  type="button"
+                  onClick={addInstruction}
+                  className={s.buttons.addInstruction}>
+                  <Plus className="w-4 h-4" /> Add
+                </button>
+              </div>
+
+              <div className={s.instructions.container(errors.instructions)}>
+                {instructions.map((ins, idx) => (
+                  <div key={idx} className={s.instructions.item}>
+                    <div className={s.icon.number}>{idx + 1}.</div>
+                    <input
+                      value={ins}
+                      onChange={(e) => updateInstruction(idx, e.target.value)}
+                      placeholder={`Instruction ${idx + 1}`}
+                      className={s.instructions.input}
+                    />
+                    {instructions.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeInstruction(idx)}
+                        className={s.instructions.removeButton}>
+                        <Trash2 className={s.icon.removeInstruction} />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* slot controls */}
+            <div className={s.slots.container(errors.slots)}>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2 text-emerald-700 font-medium">
+                  <Calendar className="w-5 h-5" /> Slots & Schedule
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="text-sm text-gray-500">
+                    {slots.length} slot{slots.length !== 1 ? "s" : ""} added
+                  </div>
+                </div>
+              </div>
+
+              <div className={s.grids.timeGrid}>
+                <div className="min-w-0">
+                  <label className={s.labels.small}>Day</label>
+                  <select
+                    value={slotDay}
+                    onChange={(e) => setSlotDay(e.target.value)}
+                    className={s.formFields.smallSelect}>
+                    {days.map((d) => {
+                      const dNum = Number(d);
+                      const disabled =
+                        Number(slotYear) === currentYear &&
+                        Number(slotMonth) === currentMonth &&
+                        dNum < currentDate;
+                      return (
+                        <option key={d} value={d} disabled={disabled}>
+                          {d}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+                <div className="min-w-0">
+                  <label className={s.labels.small}>Month</label>
+                  <select
+                    value={slotMonth}
+                    onChange={(e) => setSlotMonth(e.target.value)}
+                    className={s.formFields.smallSelect}>
+                    {months.map((m, idx) => {
+                      const disabled =
+                        Number(slotYear) === currentYear && idx < currentMonth;
+                      return (
+                        <option key={m} value={String(idx)} disabled={disabled}>
+                          {m}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+                <div className="min-w-0">
+                  <label className={s.labels.small}>Year</label>
+                  <select
+                    value={slotYear}
+                    onChange={(e) => setSlotYear(e.target.value)}
+                    className={s.formFields.smallSelect}>
+                    {years.map((y) => (
+                      <option key={y} value={String(y)}>
+                        {y}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={s.grids.timeSubGrid}>
+                  <div className="min-w-0">
+                    <label className={s.labels.small}>Hour</label>
+                    <select
+                      value={slotHour}
+                      onChange={(e) => setSlotHour(e.target.value)}
+                      className={s.formFields.timeSelect}>
+                      {hours.map((h) => (
+                        <option key={h} value={h}>
+                          {h}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="min-w-0">
+                    <label className={s.labels.small}>Minute</label>
+                    <select
+                      value={slotMinute}
+                      onChange={(e) => setSlotMinute(e.target.value)}
+                      className={s.formFields.timeSelect}>
+                      {minutes.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="min-w-0">
+                    <label className={s.labels.small}>AM/PM</label>
+                    <select
+                      value={slotAmPm}
+                      onChange={(e) => setSlotAmPm(e.target.value)}
+                      className={s.formFields.ampmSelect}>
+                      {ampm.map((a) => (
+                        <option key={a} value={a}>
+                          {a}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <button
+                  type="button"
+                  onClick={addSlot}
+                  className={s.buttons.addSlot}>
+                  <Plus className="w-4 h-4" /> Add This Time Slot
+                </button>
+              </div>
+
+              <div>
+                <div className="text-xs text-gray-500 mb-2">
+                  Added Slots ({slots.length})
+                </div>
+
+                <div className={s.grids.slotsGrid}>
+                  {slots.length === 0 ? (
+                    <div className="text-sm text-gray-400 italic px-4 py-2">
+                      No slots added yet. Select a time and click "Add This Time
+                      Slot"
+                    </div>
+                  ) : (
+                    slots.map((slot, idx) => (
+                      <div key={slot} className={s.slots.slotItem}>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <Clock className={s.icon.clock} />
+                          <div className={s.slots.slotText}>{slot}</div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => removeSlot(idx)}
+                          className={s.buttons.slotRemove}>
+                          <Trash2 className={s.icon.trash} />
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
