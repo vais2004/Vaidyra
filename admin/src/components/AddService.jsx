@@ -347,7 +347,7 @@ const AddService = ({ serviceId }) => {
       <div className={s.toast.container}>
         {toast && (
           <div
-            className={`${s.toast.toastBase} ${toast.type === "error" ? s.toast.toastError : toast.type === "info" ? s.toast.toastInfo : s.toast.toastSuccess}animate-slideIn`}>
+            className={`${s.toast.toastBase} ${toast.type === "error" ? s.toast.toastError : toast.type === "info" ? s.toast.toastInfo : s.toast.toastSuccess} animate-slideIn`}>
             <div className={s.toast.iconContainer(toast.type)}>
               {toast.type === "error" ? (
                 <AlertTriangle className="w-5 h-5" />
@@ -424,7 +424,7 @@ const AddService = ({ serviceId }) => {
               <div className="w-full flex gap-2 items-center">
                 <input
                   type="file"
-                  accept="image/"
+                  accept="image/*"
                   ref={fileRef}
                   onChange={handleImageChange}
                   className="hidden"
