@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { addServiceStyles as s } from "../assets/dummyStyles";
+import {
+  Clock,
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+  Image,
+  Plus,
+} from "lucide-react";
 
 const AddService = ({ serviceId }) => {
   const API_BASE = "http://localhost:4000";
@@ -335,8 +343,104 @@ const AddService = ({ serviceId }) => {
   }
 
   return (
-    <div>
-      <div></div>
+    <div className={s.container.main}>
+      <div className={s.toast.container}>
+        {toast && (
+          <div
+            className={`${s.toast.toastBase} ${toast.type === "error" ? s.toast.toastError : toast.type === "info" ? s.toast.toastInfo : s.toast.toastSuccess}animate-slideIn`}>
+            <div className={s.toast.iconContainer(toast.type)}>
+              {toast.type === "error" ? (
+                <AlertTriangle className="w-5 h-5" />
+              ) : toast.type === "info" ? (
+                <Clock className="w-5 h-5" />
+              ) : (
+                <CheckCircle className="w-5 h-5" />
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className={s.toast.title}>{toast.title}</div>
+              <div className={s.toast.message}>{toast.message}</div>
+            </div>
+            <button
+              onClick={() => setToast(null)}
+              className={s.buttons.toastClose}>
+              <XCircle className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+            </button>
+          </div>
+        )}
+      </div>
+      <form onSubmit={handleSubmit} className={s.container.form}>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+          <div>
+            <h1 className={s.header.title}>
+              {serviceId ? "Edit Service" : "Add Service"}
+            </h1>
+            <p className={s.header.subtitle}>
+              Create a beautiful service card with unique time slots
+            </p>
+          </div>
+          <div className={s.headerActions}>
+            <button
+              type="button"
+              onClick={resetForm}
+              className={s.buttons.reset}>
+              Reset
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className={s.buttons.submit}>
+              {submitting ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin">
+                  Saving...
+                </div>
+              ) : (
+                <>
+                  <CheckCircle className="w-4 h-4" />
+                  {serviceId ? "Update Service" : "Save Service"}
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+        {/* left side */}
+        <div className={s.grids.main}>
+          <div className="lg:col-span-1 md:col-span-1 col-span-1 flex flex-col items-center">
+            <div className={s.imageUpload.container(errors.image)}>
+              <div className={s.imageUpload.preview}>
+                {imagePreview ? (
+                  <img
+                    src={imagePreview}
+                    alt="preview"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className={s.imageUpload.placeholder}>
+                    <Image className="w-10 h-10" />
+                    <div className="mt-2 text-sm">Service image (required)</div>
+                  </div>
+                )}
+              </div>
+              <div className="w-full flex gap-2 items-center">
+                <input
+                  type="file"
+                  accept="image/"
+                  ref={fileRef}
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  className={s.buttons.uploadImage}>
+                  <Plus className="w-4 h-4" />{" "}
+                  {imagePreview ? "Replace Image" : "Upload Image"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   );
 };
