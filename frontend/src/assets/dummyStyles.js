@@ -97,7 +97,8 @@ export const iconSize = {
 
 export const bannerStyles = {
   // Banner container styles
-  bannerContainer: "relative w-full max-w-7xl mx-auto my-12 px-4",
+  // bannerContainer: "relative w-full max-w-7xl mx-auto my-12 px-4",
+  bannerContainer: "relative w-full max-w-7xl mx-auto mt-24 mb-12 px-4",
 
   // Main container with animated border
   mainContainer: "relative rounded-3xl shadow-2xl overflow-hidden group",
