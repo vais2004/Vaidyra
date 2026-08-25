@@ -635,7 +635,7 @@ const ServiceAppointmentsPage = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className={serviceAppointmentsStyles.statusFilterSelect}
+              className={s.statusFilterSelect}
               title="Filter by status">
               <option value="">All</option>
               <option value="Pending">Pending</option>
@@ -778,37 +778,34 @@ const ServiceAppointmentsPage = () => {
         </div>
       )}
       <Toast toasts={toasts} removeToast={removeToast} />
+
       <div className={s.legendContainer}>
         <div className={s.legendItem}>
-          <div className={`${s.legendDot} bg-amber-400`}>
-            <span>Pending</span>
-          </div>
+          <span className={`${s.legendDot} bg-amber-400`} />
+          <span>Pending</span>
         </div>
 
         <div className={s.legendItem}>
-          <div className={`${s.legendDot} bg-emerald-400`}>
-            <span>Confirmed</span>
-          </div>
+          <span className={`${s.legendDot} bg-emerald-400`} />
+          <span>Confirmed</span>
         </div>
 
         <div className={s.legendItem}>
-          <div className={`${s.legendDot} bg-red-400`}>
-            <span>Canceled</span>
-          </div>
+          <span className={`${s.legendDot} bg-red-400`} />
+          <span>Canceled</span>
         </div>
 
         <div className={s.legendItem}>
-          <div className={`${s.legendDot} bg-sky-400`}>
-            <span>Completed</span>
-          </div>
+          <span className={`${s.legendDot} bg-sky-400`} />
+          <span>Completed</span>
         </div>
 
         <div className={s.legendItem}>
-          <div className={`${s.legendDot} bg-indigo-400`}>
-            <span>Rescheduled</span>
-          </div>
+          <span className={`${s.legendDot} bg-indigo-400`} />
+          <span>Rescheduled</span>
         </div>
       </div>
+
       <style>{s.animatedBorderStyle}</style>
     </div>
   );
