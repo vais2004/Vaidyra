@@ -16,7 +16,7 @@ import {
 
 const API_BASE = "http://localhost:4000";
 
-//HELPERS FUNCTION
+// HELPER FUNCTIONS
 function formatTwo(n) {
   return String(n).padStart(2, "0");
 }
@@ -45,7 +45,7 @@ function parseTimeToParts(timeStr) {
     return { hour: hh, minute: mm, ampm };
   }
   return { hour: 12, minute: 0, ampm: "AM" };
-} //for time ap/pm
+} // For AM/PM time
 
 function timePartsTo12HourString(hh24, mm) {
   let ampm = hh24 >= 12 ? "PM" : "AM";
@@ -70,7 +70,7 @@ function formatTimeDisplay(a) {
 
 //small component for statusBadge
 function StatusBadge({ status }) {
-  const classes = serviceAppointmentsStyles.statusBadge(status);
+  const classes = s.statusBadge(status);
   return (
     <span className={classes}>
       {status === "Confirmed" && <CheckCircle className="h-4 w-4" />}
@@ -83,24 +83,20 @@ function StatusBadge({ status }) {
 //for toast
 function Toast({ toasts, removeToast }) {
   return (
-    <div className={serviceAppointmentsStyles.toastContainer}>
+    <div className={s.toastContainer}>
       {toasts.map((t) => (
-        <div key={t.id} className={serviceAppointmentsStyles.toast}>
-          <div className={serviceAppointmentsStyles.toastContent}>
+        <div key={t.id} className={s.toast}>
+          <div className={s.toastContent}>
             <div className="mt-0.5">
-              <Loader2 className={serviceAppointmentsStyles.toastSpinner} />
+              <Loader2 className={s.toastSpinner} />
             </div>
-            <div className={serviceAppointmentsStyles.toastText}>
-              <div className={serviceAppointmentsStyles.toastTitle}>
-                {t.title}
-              </div>
-              <div className={serviceAppointmentsStyles.toastMessage}>
-                {t.message}
-              </div>
+            <div className={s.toastText}>
+              <div className={s.toastTitle}>{t.title}</div>
+              <div className={s.toastMessage}>{t.message}</div>
             </div>
             <button
               onClick={() => removeToast(t.id)}
-              className={serviceAppointmentsStyles.toastCloseButton}
+              className={s.toastCloseButton}
               aria-label="close toast">
               ✕
             </button>
@@ -128,7 +124,7 @@ function StatusSelect({ appointment, onChange, disabled }) {
       value={appointment.status}
       onChange={(e) => onChange(e.target.value)}
       disabled={terminal || disabled}
-      className={serviceAppointmentsStyles.statusSelect(terminal)}
+      className={s.statusSelect(terminal)}
       title={terminal ? "Status cannot be changed" : "Change status"}>
       {options.map((opt) => (
         <option key={opt.value} value={opt.value}>
@@ -139,7 +135,7 @@ function StatusSelect({ appointment, onChange, disabled }) {
   );
 }
 
-//to get todays date example[YYYY-MM-DD]
+// Get today's date example[YYYY-MM-DD]
 function getTodayISO() {
   const d = new Date();
   const y = d.getFullYear();
@@ -213,34 +209,30 @@ function RescheduleButton({ appointment, onReschedule, disabled }) {
             title={
               terminal ? "Cannot reschedule completed/canceled" : "Reschedule"
             }
-            className={serviceAppointmentsStyles.rescheduleButton(terminal)}>
+            className={s.rescheduleButton(terminal)}>
             Reschedule
           </button>
         </div>
       ) : (
-        <div className={serviceAppointmentsStyles.rescheduleEditContainer}>
+        <div className={s.rescheduleEditContainer}>
           <input
             type="date"
             value={date}
             min={getTodayISO()}
             onChange={(e) => setDate(e.target.value)}
-            className={serviceAppointmentsStyles.rescheduleDateInput}
+            className={s.rescheduleDateInput}
           />
           <input
             type="time"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className={serviceAppointmentsStyles.rescheduleTimeInput}
+            className={s.rescheduleTimeInput}
           />
-          <div className={serviceAppointmentsStyles.rescheduleActions}>
-            <button
-              onClick={save}
-              className={serviceAppointmentsStyles.rescheduleSaveButton}>
+          <div className={s.rescheduleActions}>
+            <button onClick={save} className={s.rescheduleSaveButton}>
               Save
             </button>
-            <button
-              onClick={cancel}
-              className={serviceAppointmentsStyles.rescheduleCancelButton}>
+            <button onClick={cancel} className={s.rescheduleCancelButton}>
               Cancel
             </button>
           </div>
@@ -785,6 +777,39 @@ const ServiceAppointmentsPage = () => {
           )}
         </div>
       )}
+      <Toast toasts={toasts} removeToast={removeToast} />
+      <div className={s.legendContainer}>
+        <div className={s.legendItem}>
+          <div className={`${s.legendDot} bg-amber-400`}>
+            <span>Pending</span>
+          </div>
+        </div>
+
+        <div className={s.legendItem}>
+          <div className={`${s.legendDot} bg-emerald-400`}>
+            <span>Confirmed</span>
+          </div>
+        </div>
+
+        <div className={s.legendItem}>
+          <div className={`${s.legendDot} bg-red-400`}>
+            <span>Canceled</span>
+          </div>
+        </div>
+
+        <div className={s.legendItem}>
+          <div className={`${s.legendDot} bg-sky-400`}>
+            <span>Completed</span>
+          </div>
+        </div>
+
+        <div className={s.legendItem}>
+          <div className={`${s.legendDot} bg-indigo-400`}>
+            <span>Rescheduled</span>
+          </div>
+        </div>
+      </div>
+      <style>{s.animatedBorderStyle}</style>
     </div>
   );
 };
