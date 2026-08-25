@@ -1,7 +1,18 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { serviceAppointmentsStyles as s } from "../assets/dummyStyles";
 import ListServicePage from "../components/ListServicePage";
-import { SearchIcon, XIcon } from "lucide-react";
+import {
+  SearchIcon,
+  XIcon,
+  CheckCircle,
+  XCircle,
+  Loader2,
+  User,
+  Phone,
+  BadgeIndianRupee,
+  Calendar,
+  Clock,
+} from "lucide-react";
 
 const API_BASE = "http://localhost:4000";
 
@@ -655,6 +666,125 @@ const ServiceAppointmentsPage = () => {
           </div>
         </div>
       </header>
+      {loading ? (
+        <div className={s.loadingContainer}>
+          <Loader2 className="animate-spin" />
+          Loading appointments...
+        </div>
+      ) : error ? (
+        <div className={s.errorContainer}>{error}</div>
+      ) : (
+        <div className={s.gridContainer}>
+          {displayList.length === 0 ? (
+            <div className={s.noResultsContainer}>
+              <div className={s.noResultsIcon}>
+                <SearchIcon />
+              </div>
+              <div className={s.noResultsText}>
+                No appointments match your search
+              </div>
+              <div className={s.noResultsSubtext}>
+                Try a different patient name or service
+              </div>
+            </div>
+          ) : (
+            displayList.map((a) => {
+              const isLocked =
+                a.status === "Completed" || a.status === "Canceled";
+              return (
+                <article key={a.id} className={s.article}>
+                  <div className={s.cardInner}>
+                    <div>
+                      <div className={s.cardHeader}>
+                        <div className={s.patientInfoContainer}>
+                          <div className={s.patientAvatar}>
+                            <User className={s.patientAvatarIcon} />
+                          </div>
+
+                          <div>
+                            <div className={s.patientName}>{a.patientName}</div>
+                            <div className={s.patientDetails}>
+                              {a.gender} • {a.age} yrs
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className={s.statusContainer}>
+                          <StatusBadge status={a.status} />
+                          <div className="mt-1">
+                            <StatusSelect
+                              appointment={a}
+                              onChange={(s) => changeStatusRemote(a.id, s)}
+                              disabled={false}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className={s.detailsContainer}>
+                        <div className={s.detailItem}>
+                          <Phone className={s.detailIcon} />
+                          <span className={s.detailText}>{a.mobile}</span>
+                        </div>
+
+                        <div className={s.detailItem}>
+                          <BadgeIndianRupee className={s.detailIcon} />
+                          <span className={s.feesText}>Fees: ₹{a.fees}</span>
+                        </div>
+
+                        <div className={s.detailItem}>
+                          <Calendar className={s.detailIcon} />
+                          <span className={s.detailText}>
+                            Date: {formatDateNice(a.date)}
+                          </span>
+                        </div>
+
+                        <div className={s.detailItem}>
+                          <Clock className={s.detailIcon} />
+                          <span className={s.detailText}>
+                            Time: {formatTimeDisplay(a)}
+                          </span>
+                        </div>
+
+                        <div className={s.serviceText}>
+                          Service:{" "}
+                          <span className={s.serviceName}>{a.serviceName}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className={s.actionsContainer}>
+                      <div className={s.actionsInnerContainer}>
+                        <div className="flex-1">
+                          <RescheduleButton
+                            appointment={a}
+                            onReschedule={(d, t) =>
+                              rescheduleRemote(a.id, d, t)
+                            }
+                            disabled={false}
+                          />
+                        </div>
+
+                        <div className="ml-3">
+                          <button
+                            onClick={() => cancelRemote(a.id)}
+                            disabled={isLocked}
+                            className={s.cancelButton(isLocked)}
+                            title={
+                              isLocked ? "Cannot cancel" : "Cancel appointment"
+                            }>
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              );
+            })
+          )}
+        </div>
+      )}
     </div>
   );
 };
