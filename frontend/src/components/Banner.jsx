@@ -1,6 +1,13 @@
 import React from "react";
 import { bannerStyles as s } from "../assets/dummyStyles";
-import { Star, Stethoscope } from "lucide-react";
+import {
+  Clock,
+  Ribbon,
+  ShieldUser,
+  Star,
+  Stethoscope,
+  Users,
+} from "lucide-react";
 
 const Banner = () => {
   return (
@@ -42,6 +49,27 @@ const Banner = () => {
                   At Your Fingertips
                 </span>
               </p>
+              <div className={s.featuresGrid}>
+                <div className={`${s.featureItem} ${s.featureBorderGreen}`}>
+                  <Ribbon className={s.featureIcon} />
+                  <span className={s.featureText}>Certified Specialists</span>
+                </div>
+
+                <div className={`${s.featureItem} ${s.featureBorderBlue}`}>
+                  <Clock className={s.featureIcon} />
+                  <span className={s.featureText}>24/7 Availability</span>
+                </div>
+
+                <div className={`${s.featureItem} ${s.featureBorderEmerald}`}>
+                  <ShieldUser className={s.featureIcon} />
+                  <span className={s.featureText}>Safe &amp; Secure</span>
+                </div>
+
+                <div className={`${s.featureItem} ${s.featureBorderPurple}`}>
+                  <Users className={s.featureIcon} />
+                  <span className={s.featureText}>500+ Doctors</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
