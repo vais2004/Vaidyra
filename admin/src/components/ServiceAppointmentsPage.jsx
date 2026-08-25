@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { serviceAppointmentsStyles } from "../assets/dummyStyles";
+import React, { useEffect, useMemo, useState } from "react";
+import { serviceAppointmentsStyles as s } from "../assets/dummyStyles";
 import ListServicePage from "../components/ListServicePage";
+import { SearchIcon, XIcon } from "lucide-react";
 
 const API_BASE = "http://localhost:4000";
 
@@ -351,6 +352,7 @@ const ServiceAppointmentsPage = () => {
     return body?.data || body?.appointment || body || {};
   }
 
+  //to update the status
   async function changeStatusRemote(id, newStatus) {
     const old = appointments.find((a) => a.id === id);
     if (!old) return;
@@ -422,6 +424,7 @@ const ServiceAppointmentsPage = () => {
     }
   }
 
+  //to reschedule the appointment for later but not on previous days
   async function rescheduleRemote(id, dateStr, time24) {
     const appt = appointments.find((a) => a.id === id);
     if (!appt) return;
@@ -507,6 +510,7 @@ const ServiceAppointmentsPage = () => {
     }
   }
 
+  //to cancel any appointment
   async function cancelRemote(id) {
     const appt = appointments.find((a) => a.id === id);
     if (!appt) return;
@@ -558,6 +562,7 @@ const ServiceAppointmentsPage = () => {
     }
   }
 
+  // to filter
   const filtered = useMemo(() => {
     const q = debouncedSearch.toLowerCase();
     return appointments
@@ -570,6 +575,7 @@ const ServiceAppointmentsPage = () => {
       .filter((a) => (statusFilter ? a.status === statusFilter : true));
   }, [appointments, debouncedSearch, statusFilter]);
 
+  //to get time stamp
   function getTimestamp(a) {
     try {
       const [y, m, d] = (a.date || "1970-01-01").split("-").map(Number);
@@ -582,6 +588,8 @@ const ServiceAppointmentsPage = () => {
       return 0;
     }
   }
+
+  //sort that is upcoming date comes first
   const displayList = useMemo(() => {
     const copy = filtered.slice();
     copy.sort((x, y) => getTimestamp(y) - getTimestamp(x));
@@ -589,8 +597,64 @@ const ServiceAppointmentsPage = () => {
   }, [filtered]);
 
   return (
-    <div>
-      <div></div>
+    <div className={s.container}>
+      <header className={s.headerContainer}>
+        <div className={s.headerTitleContainer}>
+          <h1 className={s.headerTitle}>Appointments</h1>
+          <p className={s.headerSubtitle}>
+            Manage patient bookings - quick search & status controls
+          </p>
+        </div>
+        <div className={s.searchContainer}>
+          <div className={s.searchInputWrapper}>
+            <label className={s.searchLabel}>
+              <span className="sr-only">Search Appointments</span>
+              <div className="flex items-center gap-2 relative w-full">
+                <div className={s.searchIconContainer}>
+                  <SearchIcon className={s.searchIcon} />
+                </div>
+                <input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search by patient or service..."
+                  className={s.searchInput}
+                />{" "}
+                {search ? (
+                  <button
+                    className={s.clearSearchButton}
+                    onClick={() => setSearch("")}>
+                    <XIcon className={s.clearSearchIcon} />
+                  </button>
+                ) : null}
+              </div>
+            </label>
+
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className={serviceAppointmentsStyles.statusFilterSelect}
+              title="Filter by status">
+              <option value="">All</option>
+              <option value="Pending">Pending</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Rescheduled">Rescheduled</option>
+              <option value="Completed">Completed</option>
+              <option value="Canceled">Canceled</option>
+            </select>
+          </div>
+
+          <div className={s.searchInfo}>
+            <div>
+              {displayList.length} result{displayList.length !== 1 ? "s" : ""}
+            </div>
+            <div>
+              <button onClick={fetchAppointments} className={s.refreshButton}>
+                Refresh
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
     </div>
   );
 };
