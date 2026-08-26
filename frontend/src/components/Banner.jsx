@@ -8,8 +8,10 @@ import {
   Stethoscope,
   Users,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Banner = () => {
+  const navigate = useNavigate();
   return (
     <div className={s.bannerContainer}>
       <div className={s.mainContainer}>
@@ -69,6 +71,10 @@ const Banner = () => {
                   <Users className={s.featureIcon} />
                   <span className={s.featureText}>500+ Doctors</span>
                 </div>
+              </div>
+
+              <div className={s.ctaButtonsContainer}>
+                <button></button>
               </div>
             </div>
           </div>
