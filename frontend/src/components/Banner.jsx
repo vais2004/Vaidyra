@@ -74,7 +74,7 @@ const Banner = () => {
               </div>
 
               <div className={s.ctaButtonsContainer}>
-                <button></button>
+                <button onClick={() => navigate("/doctors")}></button>
               </div>
             </div>
           </div>
