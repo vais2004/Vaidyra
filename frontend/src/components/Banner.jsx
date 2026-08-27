@@ -11,6 +11,7 @@ import {
   Users,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import banner from "../assets/BannerImg.png";
 
 const Banner = () => {
   const navigate = useNavigate();
@@ -93,6 +94,14 @@ const Banner = () => {
                     <span>Emergency Call</span>
                   </div>
                 </button>
+              </div>
+            </div>
+
+            <div className={s.rightImageSection}>
+              <div className={s.imageContainer}>
+                <div className={s.imageFrame}>
+                  <img src={banner} alt="banner" className={s.image} />
+                </div>
               </div>
             </div>
           </div>
