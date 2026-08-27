@@ -1,7 +1,9 @@
 import React from "react";
 import { bannerStyles as s } from "../assets/dummyStyles";
 import {
+  Calendar,
   Clock,
+  Phone,
   Ribbon,
   ShieldUser,
   Star,
@@ -74,7 +76,23 @@ const Banner = () => {
               </div>
 
               <div className={s.ctaButtonsContainer}>
-                <button onClick={() => navigate("/doctors")}></button>
+                <button
+                  onClick={() => navigate("/doctors")}
+                  className={s.bookButton}>
+                  <div className={s.bookButtonOverlay}></div>
+                  <div className={s.bookButtonContent}>
+                    <Calendar className={s.bookButtonIcon} />
+                    <span>Book Appointment Now</span>
+                  </div>
+                </button>
+                <button
+                  onClick={() => (window.location.href = "tel:8299431275")}
+                  className={s.emergencyButton}>
+                  <div className={s.emergencyButtonContent}>
+                    <Phone className={s.emergencyButtonIcon} />
+                    <span>Emergency Call</span>
+                  </div>
+                </button>
               </div>
             </div>
           </div>
