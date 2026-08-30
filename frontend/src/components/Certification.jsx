@@ -66,7 +66,14 @@ const Certification = () => {
             <div className={s.headingInner}>
               <div className={s.leftLine}></div>
               <div className={s.rightLine}></div>
+              <h2 className={s.title}>
+                <span className={s.titleText}>CERTIFIED & EXCELLENCE</span>
+              </h2>
             </div>
+            <p className={s.subtitle}>
+              Government recognized and internationally accredited healthcare
+              standards
+            </p>
           </div>
         </div>
       </div>
