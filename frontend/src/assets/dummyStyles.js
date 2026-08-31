@@ -200,11 +200,12 @@ export const commonStyles = {
 
 export const certificationStyles = {
   // Container styles
+  // Container styles
   container:
-    "relative py-6 bg-linear-to-brfrom-emerald-50 via-green-50 to-teal-50 overflow-hidden",
+    "relative py-6 bg-linear-to-br from-emerald-50 via-green-50 to-teal-50 overflow-hidden",
 
   // Background styles
-  backgroundGrid: "absolute inset-0",
+  backgroundGrid: "relative",
   topLine:
     "absolute top-0 left-0 w-full h-1 bg-linear-to-br from-transparent via-green-400 to-transparent opacity-60",
   gridContainer: "absolute inset-0 opacity-[0.02]",
