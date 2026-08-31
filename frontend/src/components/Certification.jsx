@@ -74,9 +74,37 @@ const Certification = () => {
               Government recognized and internationally accredited healthcare
               standards
             </p>
+            <div className={s.badgeContainer}>
+              <div className={s.badgeDot}>
+                <span className={s.badgeText}>OFFICIALLY CERTIFIED</span>
+              </div>
+            </div>
+            <div className={s.logosContainer}>
+              <div className={s.logosInner}>
+                <div className={s.logosFlexContainer}>
+                  <div className={s.logosMarquee}>
+                    {duplicatedCertifications.map((cert, index) => (
+                      <div
+                        key={`cert-${cert.id}-${index}`}
+                        className={s.logoItem}>
+                        <div className="relative">
+                          <img
+                            src={cert.image}
+                            alt={cert.name}
+                            className={s.logoImage}
+                          />
+                        </div>
+                        <span className={s.logoText}>{cert.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <style>{s.animationStyles}</style>
     </div>
   );
 };
