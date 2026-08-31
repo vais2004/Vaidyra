@@ -3,10 +3,10 @@ import { certificationStyles as s } from "../assets/dummyStyles";
 import C3 from "../assets/C3.png";
 import C1 from "../assets/C1.png";
 import C2 from "../assets/C2.png";
-import C4 from "../assets/C4.svg";
+import C4 from "../assets/C4.png";
 import C5 from "../assets/C5.png";
 import C6 from "../assets/C6.png";
-import C7 from "../assets/C7.svg";
+import C7 from "../assets/C7.png";
 
 const Certification = () => {
   const certifications = [
@@ -61,49 +61,59 @@ const Certification = () => {
             </div>
           </div>
         </div>
+
         <div className={s.contentWrapper}>
+          {/* Heading */}
           <div className={s.headingContainer}>
             <div className={s.headingInner}>
               <div className={s.leftLine}></div>
+
               <div className={s.rightLine}></div>
+
               <h2 className={s.title}>
                 <span className={s.titleText}>CERTIFIED & EXCELLENCE</span>
               </h2>
             </div>
+
             <p className={s.subtitle}>
               Government recognized and internationally accredited healthcare
               standards
             </p>
-            <div className={s.badgeContainer}>
-              <div className={s.badgeDot}>
-                <span className={s.badgeText}>OFFICIALLY CERTIFIED</span>
-              </div>
-            </div>
-            <div className={s.logosContainer}>
-              <div className={s.logosInner}>
-                <div className={s.logosFlexContainer}>
-                  <div className={s.logosMarquee}>
-                    {duplicatedCertifications.map((cert, index) => (
-                      <div
-                        key={`cert-${cert.id}-${index}`}
-                        className={s.logoItem}>
-                        <div className="relative">
-                          <img
-                            src={cert.image}
-                            alt={cert.name}
-                            className={s.logoImage}
-                          />
-                        </div>
-                        <span className={s.logoText}>{cert.name}</span>
+          </div>
+
+          {/* Badge */}
+          <div className={s.badgeContainer}>
+            <div className={s.badgeDot}> </div>
+            <span className={s.badgeText}>OFFICIALLY CERTIFIED</span>
+          </div>
+
+          {/* Logos */}
+          <div className={s.logosContainer}>
+            <div className={s.logosInner}>
+              <div className={s.logosFlexContainer}>
+                <div className={s.logosMarquee}>
+                  {duplicatedCertifications.map((cert, index) => (
+                    <div
+                      key={`cert-${cert.id}-${index}`}
+                      className={s.logoItem}>
+                      <div className="relative">
+                        <img
+                          src={cert.image}
+                          alt={cert.name}
+                          className={s.logoImage}
+                        />
                       </div>
-                    ))}
-                  </div>
+
+                      <span className={s.logoText}>{cert.name}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <style>{s.animationStyles}</style>
     </div>
   );
