@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { homeDoctorsStyles as s, iconSize } from "../assets/dummyStyles";
 import { Link } from "react-router-dom";
+import { ChevronRight, MousePointer2Off } from "lucide-react";
 
 const HomeDoctors = ({ previewCount = 8 }) => {
   const API_BASE = "http://localhost:4000";
@@ -193,7 +194,24 @@ const HomeDoctors = ({ previewCount = 8 }) => {
                   <div className={s.experienceContainer}>
                     <div className={s.experienceBadge}>
                       <Medal className={`${iconSize.small} h-4`} />
-                      <span>{doctor.experience}</span>
+                      <span>{doctor.experience} years Experience </span>
+                    </div>
+                  </div>
+                  <div className={s.buttonContainer}>
+                    <div className="w-full">
+                      {doctor.available ? (
+                        <Link
+                          to={`/doctors/${doctor.id}`}
+                          state={{ doctor: doctor.raw || doctor }}
+                          className={s.buttonAvailable}>
+                          <ChevronRight className="w-5 h-5" /> Book Now
+                        </Link>
+                      ) : (
+                        <button disabled className={s.buttonUnavailable}>
+                          <MousePointer2Off className="w-5 h-5" />
+                          Not Available
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -202,6 +220,7 @@ const HomeDoctors = ({ previewCount = 8 }) => {
           </div>
         )}
       </div>
+      <style>{s.customCSS}</style>
     </section>
   );
 };
