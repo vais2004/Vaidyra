@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { homeDoctorsStyles as s, iconSize } from "../assets/dummyStyles";
 import { Link } from "react-router-dom";
-import { ChevronRight, MousePointer2Off } from "lucide-react";
+import { ChevronRight, MousePointer2Off, Medal } from "lucide-react";
 
 const HomeDoctors = ({ previewCount = 8 }) => {
   const API_BASE = "http://localhost:4000";
@@ -85,8 +85,8 @@ const HomeDoctors = ({ previewCount = 8 }) => {
         </div>
         {/* error / retry */}
         {error ? (
-          <div className={homeDoctorsStyles.errorContainer}>
-            <div className={homeDoctorsStyles.errorText}>{error}</div>
+          <div className={s.errorContainer}>
+            <div className={s.errorText}>{error}</div>
             <button
               onClick={() => {
                 setLoading(true);
@@ -130,7 +130,7 @@ const HomeDoctors = ({ previewCount = 8 }) => {
                   }
                 })();
               }}
-              className={homeDoctorsStyles.retryButton}>
+              className={s.retryButton}>
               Retry
             </button>
           </div>
@@ -153,7 +153,7 @@ const HomeDoctors = ({ previewCount = 8 }) => {
           <div className={s.doctorsGrid}>
             {preview.map((doctor) => (
               <article key={doctor.id || doctor.name} className={s.article}>
-                {doctor.availability ? (
+                {doctor.available ? (
                   <Link
                     to={`/doctors/${doctor.id}`}
                     state={{ doctor: doctor.raw || doctor }}>
@@ -190,7 +190,7 @@ const HomeDoctors = ({ previewCount = 8 }) => {
                   <h3 className={s.doctorName} id={`doctor-${doctor.id}-name`}>
                     {doctor.name}
                   </h3>
-                  <p className={s.specialization}>{s.specialization}</p>
+                  <p className={s.specialization}>{doctor.specialization}</p>
                   <div className={s.experienceContainer}>
                     <div className={s.experienceBadge}>
                       <Medal className={`${iconSize.small} h-4`} />
