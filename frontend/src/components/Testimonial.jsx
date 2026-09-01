@@ -152,9 +152,51 @@ const Testimonial = () => {
         <h2 className={s.title}>Voices of Trust</h2>
         <p className={s.subtitle}>
           Real stories from doctors and patients sharing their positive
-          experience with out healthcare platform.
+          experience with our healthcare platform.
         </p>
       </div>
+      <div
+        className={s.grid}
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}>
+        <div className={`${s.columnContainer} ${s.leftColumnBorder}`}>
+          <div className={`${s.columnHeader} ${s.leftColumnHeader}`}>
+            👩‍⚕️ Medical Professionals
+          </div>
+          <div
+            onTouchStart={() => setIsPaused(true)}
+            onTouchEnd={() => setIsPaused(false)}
+            ref={scrollRefLeft}
+            className={s.scrollContainer}>
+            {[...leftTestimonials, ...leftTestimonials].map((t, i) => (
+              <TestimonialCard
+                key={`L-${i}`}
+                testimonial={t}
+                direction="left"
+              />
+            ))}
+          </div>
+        </div>
+        <div className={`${s.columnContainer} ${s.rightColumnBorder}`}>
+          <div className={`${s.columnHeader} ${s.rightColumnHeader}`}>
+            🧑‍💼 Patients
+          </div>
+          <div
+            onTouchStart={() => setIsPaused(true)}
+            onTouchEnd={() => setIsPaused(false)}
+            ref={scrollRefRight}
+            className={s.scrollContainer}>
+            {[...rightTestimonials, ...rightTestimonials].map((t, i) => (
+              <TestimonialCard
+                key={`R-${i}`}
+                testimonial={t}
+                direction="right"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+      <style>{s.animationStyles}</style>
     </div>
   );
 };
