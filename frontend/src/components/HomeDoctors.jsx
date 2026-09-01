@@ -139,7 +139,7 @@ const HomeDoctors = ({ previewCount = 8 }) => {
         {loading ? (
           <div className={s.skeletonGrid}>
             {Array.from({ length: previewCount }).map((_, i) => (
-              <div className={s.skeletonCard}>
+              <div key={i} className={s.skeletonCard}>
                 <div className={s.skeletonImage}></div>
                 <div className={s.skeletonText1}></div>
                 <div className={s.skeletonText2}></div>
