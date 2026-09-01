@@ -1,7 +1,15 @@
 import React from "react";
 import { footerStyles as s } from "../assets/dummyStyles";
 import logo from "../assets/logo.png";
-import { Youtube, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaYoutube,
+  FaTwitter,
+} from "react-icons/fa";
+
+import { Stethoscope, Activity } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -24,40 +32,58 @@ const Footer = () => {
 
   const socialLinks = [
     {
-      Icon: Facebook,
-      color: footerStyles.facebookColor,
+      Icon: FaFacebookF,
+      color: s.facebookColor,
       name: "Facebook",
       href: "https://www.facebook.com/people/Hexagon-Digital-Services/61567156598660/",
     },
     {
-      Icon: Twitter,
-      color: footerStyles.twitterColor,
+      Icon: FaTwitter,
+      color: s.twitterColor,
       name: "Twitter",
       href: "https://www.linkedin.com/company/hexagondigtial-services/",
     },
     {
-      Icon: Instagram,
-      color: footerStyles.instagramColor,
+      Icon: FaInstagram,
+      color: s.instagramColor,
       name: "Instagram",
       href: "http://instagram.com/hexagondigitalservices?igsh=MWp2NG1oNTlibWVnZA%3D%3D",
     },
     {
-      Icon: Linkedin,
-      color: footerStyles.linkedinColor,
+      Icon: FaLinkedinIn,
+      color: s.linkedinColor,
       name: "LinkedIn",
       href: "https://www.linkedin.com/company/hexagondigtial-services/",
     },
     {
-      Icon: Youtube,
-      color: footerStyles.youtubeColor,
+      Icon: FaYoutube,
+      color: s.youtubeColor,
       name: "YouTube",
       href: "https://youtube.com/@hexagondigitalservices?si=lxEFYNCP42t6AoDJ",
     },
   ];
 
   return (
-    <div>
-      <div></div>
+    <div className={s.footerContainer}>
+      <div className={s.floatingIcon1}>
+        <Stethoscope className={s.stethoscopeIcon} />
+      </div>
+      <div className={s.floatingIcon2} style={{ animationDelay: "3s" }}>
+        <Activity className={s.activityIcon} />
+      </div>
+      <div className={s.mainContent}>
+        <div className={s.gridContainer}>
+          <div className={s.companySection}>
+            <div className={s.logoContainer}>
+              <div className={s.logoWrapper}>
+                <div className={s.logoImageContainer}>
+                  <img className={s.logoImage} src={logo} alt="logo" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
