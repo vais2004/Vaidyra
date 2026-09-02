@@ -9,7 +9,7 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 
-import { Stethoscope, Activity } from "lucide-react";
+import { Stethoscope, Activity, Phone, Mail, MapPin } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -41,25 +41,25 @@ const Footer = () => {
       Icon: FaTwitter,
       color: s.twitterColor,
       name: "Twitter",
-      href: "https://www.linkedin.com/company/hexagondigtial-services/",
+      href: "https://x.com/Vaish30052004",
     },
     {
       Icon: FaInstagram,
       color: s.instagramColor,
       name: "Instagram",
-      href: "http://instagram.com/hexagondigitalservices?igsh=MWp2NG1oNTlibWVnZA%3D%3D",
+      href: "https://www.instagram.com/vaishhhhh.kawale?utm_source=qr&igsi=OXhobWc4c3hmeXp1",
     },
     {
       Icon: FaLinkedinIn,
       color: s.linkedinColor,
       name: "LinkedIn",
-      href: "https://www.linkedin.com/company/hexagondigtial-services/",
+      href: "https://www.linkedin.com/in/vaishnavi-kawale-2753a034a",
     },
     {
       Icon: FaYoutube,
       color: s.youtubeColor,
       name: "YouTube",
-      href: "https://youtube.com/@hexagondigitalservices?si=lxEFYNCP42t6AoDJ",
+      href: "https://youtube.com/@41-xll-a-vaishnavikawale99?si=dNDKLtF1MzU3tjFg",
     },
   ];
 
@@ -79,6 +79,37 @@ const Footer = () => {
                 <div className={s.logoImageContainer}>
                   <img className={s.logoImage} src={logo} alt="logo" />
                 </div>
+              </div>
+              <div>
+                <h2 className={s.companyName}>Vaidyra</h2>
+                <p className={s.companyTagline}>Healthcare Solutions</p>
+              </div>
+            </div>
+            <p className={s.companyDescription}>
+              Your trusted partner in healthcare innovation. We're committed to
+              providing exceptional medical care with cutting-edge technology
+              and compassionate service.
+            </p>
+            <div className={s.contactContainer}>
+              <div className={s.contactItem}>
+                <div className={s.contactIconWrapper}>
+                  <Phone className={s.contactIcon} />
+                </div>
+                <span className={s.contactText}>+91 8767843011</span>
+              </div>
+              <div className={s.contactItem}>
+                <div className={s.contactIconWrapper}>
+                  <Mail className={s.contactIcon} />
+                </div>
+                <span className={s.contactText}>vkawale2004@gmail.com</span>
+              </div>
+              <div className={s.contactItem}>
+                <div className={s.contactIconWrapper}>
+                  <MapPin className={s.contactIcon} />
+                </div>
+                <span className={s.contactText}>
+                  Chhatrapati Sambhajinagar, Maharashtra, India
+                </span>
               </div>
             </div>
           </div>
