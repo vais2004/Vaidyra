@@ -35,7 +35,7 @@ const Footer = () => {
       Icon: FaFacebookF,
       color: s.facebookColor,
       name: "Facebook",
-      href: "https://www.facebook.com/people/Hexagon-Digital-Services/61567156598660/",
+      href: "https://www.facebook.com/",
     },
     {
       Icon: FaTwitter,
