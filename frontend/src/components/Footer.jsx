@@ -9,7 +9,14 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 
-import { Stethoscope, Activity, Phone, Mail, MapPin } from "lucide-react";
+import {
+  Stethoscope,
+  Activity,
+  Phone,
+  Mail,
+  MapPin,
+  ArrowRight,
+} from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -64,7 +71,7 @@ const Footer = () => {
   ];
 
   return (
-    <div className={s.footerContainer}>
+    <footer className={s.footerContainer}>
       <div className={s.floatingIcon1}>
         <Stethoscope className={s.stethoscopeIcon} />
       </div>
@@ -113,9 +120,27 @@ const Footer = () => {
               </div>
             </div>
           </div>
+          {/* quick list*/}
+          <div className={s.linksSection}>
+            <h3 className={s.sectionTitle}>Quick Links</h3>
+            <ul className={s.linksList}>
+              {quickLinks.map((link, index) => (
+                <li key={link.name} className={s.linkItem}>
+                  <a
+                    href={link.href}
+                    className={s.quickLink}
+                    style={{ animationDelay: `${index * 60}ms` }}>
+                    <div className={s.quickLinkIconWrapper}>
+                      <ArrowRight className={s.quickLinkIcon} />
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
 
