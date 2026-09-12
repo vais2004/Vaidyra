@@ -16,6 +16,7 @@ import {
   Mail,
   MapPin,
   ArrowRight,
+  Send,
 } from "lucide-react";
 
 const Footer = () => {
@@ -133,11 +134,80 @@ const Footer = () => {
                     <div className={s.quickLinkIconWrapper}>
                       <ArrowRight className={s.quickLinkIcon} />
                     </div>
+                    <span>{link.name}</span>
                   </a>
                 </li>
               ))}
             </ul>
           </div>
+          <div className={s.linksSection}>
+            <h3 className={s.sectionTitle}>Our Services</h3>
+            <ul className={s.linksList}>
+              {services.map((service, index) => (
+                <li key={index}>
+                  <a href={service.href} className={s.serviceLink}>
+                    <div className={s.serviceIcon}></div>
+                    <span>{service.name}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          {/* Newsletter & Social */}
+          <div className={s.newsletterSection}>
+            <h3 className={s.newsletterTitle}>Stay Connected</h3>
+            <p className={s.newsletterDescription}>
+              Subscribe for health tips, medical updates, and wellness insights
+              delivered to your inbox.
+            </p>
+
+            {/* Newsletter form */}
+            <div className={s.newsletterForm}>
+              <div className={s.mobileNewsletterContainer}>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className={s.emailInput}
+                />
+                <button className={s.mobileSubscribeButton}>
+                  <Send className={s.mobileButtonIcon} />
+                  Subscribe
+                </button>
+              </div>
+
+              {/* Desktop newsletter */}
+              <div className={s.desktopNewsletterContainer}>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className={s.desktopEmailInput}
+                />
+                <button className={s.desktopSubscribeButton}>
+                  <Send className={s.desktopButtonIcon} />
+                  <span className={s.desktopButtonText}>
+                    Subscribe
+                  </span>
+                </button>
+              </div>
+
+              {/* Social icons */}
+              <div className={s.socialContainer}>
+                {socialLinks.map(({ Icon, color, name, href }, index) => (
+                  <a
+                    key={name}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={s.socialLink}
+                    style={{ animationDelay: `${index * 120}ms` }}>
+                    <div className={s.socialIconBackground} />
+                    <Icon className={`${s.socialIcon} ${color}`} />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+          ;
         </div>
       </div>
     </footer>
