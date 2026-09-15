@@ -1,9 +1,16 @@
-import React from 'react'
+import React from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import DoctorsPage from "../components/DoctorsPage";
 
 const Doctors = () => {
   return (
-    <div>Doctors</div>
-  )
-}
+    <div>
+      <Navbar />
+      <DoctorsPage />
+      <Footer />
+    </div>
+  );
+};
 
-export default Doctors
+export default Doctors;
