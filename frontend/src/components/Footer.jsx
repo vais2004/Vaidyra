@@ -211,11 +211,11 @@ const Footer = () => {
             <div className={s.designerText}>
               <span>Designed by</span>
               <a
-                href="https://hexagondigitalservices.com/"
+                href="https://github.com/vais2004"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={s.designerLink}>
-                Hexagon Digital Services
+                Vaishnavi Kawale
               </a>
             </div>
           </div>
