@@ -184,9 +184,7 @@ const Footer = () => {
                 />
                 <button className={s.desktopSubscribeButton}>
                   <Send className={s.desktopButtonIcon} />
-                  <span className={s.desktopButtonText}>
-                    Subscribe
-                  </span>
+                  <span className={s.desktopButtonText}>Subscribe</span>
                 </button>
               </div>
 
@@ -207,7 +205,18 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          ;
+          <div className={s.bottomSection}>
+            <div className={s.copyright}>
+              <span>&copy;{currentYear} Vaidyra Healthcare.</span>
+            </div>
+            <div className={s.designerText}>
+              <span>Designed by</span>
+              <a
+                href="https://hexagondigitalservices.com/"
+                target="_blank"
+                className={s.designerLink}></a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
