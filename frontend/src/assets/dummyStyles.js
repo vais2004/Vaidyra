@@ -340,8 +340,7 @@ export const contactPageStyles = {
 export const doctorsPageStyles = {
   // Main container
   mainContainer:
-    "min-h-screen bg-linear-to-br from-emerald-50 to-teal-100 py-8 sm:py-10 px-3 sm:px-6 relative overflow-hidden",
-
+    "min-h-screen bg-linear-to-br from-emerald-50 to-teal-100 pt-24 sm:pt-28 pb-8 sm:pb-10 px-3 sm:px-6 relative overflow-hidden",
   // Background shapes
   backgroundShape1:
     "absolute -top-40 -right-32 w-72 h-72 sm:w-96 sm:h-96 bg-emerald-200 rounded-full mix-blend-multiply filter blur-2xl opacity-30 animate-pulse",
