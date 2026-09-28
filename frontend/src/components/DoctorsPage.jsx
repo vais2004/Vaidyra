@@ -1,6 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { doctorsPageStyles as s } from "../assets/dummyStyles";
-import { Search, X } from "lucide-react";
+import {
+  ChevronRight,
+  CircleChevronDown,
+  CircleChevronUp,
+  Medal,
+  MousePointer2Off,
+  Search,
+  X,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 const DoctorsPage = () => {
   const API_BASE = "http://localhost:4000";
@@ -189,7 +198,7 @@ const DoctorsPage = () => {
         {loading ? (
           <div className={s.skeletonGrid}>
             {Array.from({ length: 8 }).map((_, id) => (
-              <div key={i} className={s.skeletonCard}>
+              <div key={_} className={s.skeletonCard}>
                 <div className={s.skeletonImage}></div>
                 <div className={s.skeletonName}></div>
                 <div className={s.skeletonSpecialization}></div>
@@ -240,14 +249,83 @@ const DoctorsPage = () => {
                       />
                     </div>
                   )}
+                  <h3 className={s.doctorName}>{doctor.name}</h3>
+                  <p className={s.doctorSpecialization}>
+                    {doctor.specialization}
+                  </p>
+                  <div className={s.experienceBadge}>
+                    <Medal className={s.experienceIcon} />
+                    <span>{doctor.experience || "-"} years Experience</span>
+                  </div>
+                  {doctor.available ? (
+                    <Link
+                      to={`/doctors/${doctor.id}`}
+                      state={{ doctor: doctor.raw || doctor }}
+                      className={s.bookButton}>
+                      <ChevronRight className={s.bookButtonIcon} /> Book Now
+                    </Link>
+                  ) : (
+                    <button disabled className={s.notAvailableButton}>
+                      <MousePointer2Off className={s.notAvailableIcon} /> Not
+                      Available
+                    </button>
+                  )}
                 </div>
               ))
             ) : (
-              <div></div>
+              <div className={s.noResults}>
+                No doctors found matching your search criteria.
+              </div>
             )}
           </div>
         )}
+        {filteredDoctors.length > 8 && (
+          <div className={s.showMoreContainer}>
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className={s.showMoreButton}>
+              {showAll ? (
+                <>
+                  <CircleChevronUp className={s.showMoreIcon} />
+                  Hide
+                </>
+              ) : (
+                <>
+                  <CircleChevronDown className={s.showMoreIcon} />
+                  Show More
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Animations */}
+      <style>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fade-in-up {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slide-up {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fade-in 0.9s ease-out; }
+        .animate-fade-in-up { animation: fade-in-up 0.9s ease-out both; }
+        .animate-slide-up { animation: slide-up 0.8s ease-out; }
+
+        @media (max-width: 420px) {
+          .max-w-7xl { padding-left: 10px; padding-right: 10px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          * { animation: none !important; transition: none !important; }
+        }
+      `}</style>
     </div>
   );
 };
