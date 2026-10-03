@@ -198,7 +198,7 @@ const DoctorsPage = () => {
         {loading ? (
           <div className={s.skeletonGrid}>
             {Array.from({ length: 8 }).map((_, id) => (
-              <div key={_} className={s.skeletonCard}>
+              <div key={id} className={s.skeletonCard}>
                 <div className={s.skeletonImage}></div>
                 <div className={s.skeletonName}></div>
                 <div className={s.skeletonSpecialization}></div>
