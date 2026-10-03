@@ -256,17 +256,30 @@ export const getDoctors = async (req, res) => {
 export async function getDoctorById(req, res) {
   try {
     const { id } = req.params;
-    const doc = await Doctor.findById(id).select("password").lean();
+
+    const doc = await Doctor.findById(id).lean();
+
     if (!doc) {
       return res.status(404).json({
         success: false,
         message: "Doctor not found",
       });
-      return res.json({ success: true, data: normalizeDocForClient(doc) });
     }
+
+    const normalized = normalizeDocForClient(doc);
+
+    delete normalized.password;
+
+    return res.json({
+      success: true,
+      data: normalized,
+    });
   } catch (err) {
     console.error("getDoctorByID error:", err);
-    return res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 }
 
