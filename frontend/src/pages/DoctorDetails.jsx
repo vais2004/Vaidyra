@@ -88,7 +88,7 @@ function normalizePhoneTo10(phone) {
   return digits.length <= 10 ? digits : digits.slice(-10);
 }
 
-export default function DoctorDetail() {
+export default function DoctorDetails() {
   const { id } = useParams();
 
   const [doctor, setDoctor] = useState(null);
