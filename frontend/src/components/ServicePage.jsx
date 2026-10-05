@@ -180,14 +180,35 @@ const ServicePage = ({ previewCount = 9999 }) => {
         </header>
         {error && (
           <div className={servicePageStyles.errorContainer}>
-            <div className={servicePageStyles.errorText}>
-              <button
-                onClick={loadServices}
-                className={servicePageStyles.retryButton}>
-                Retry
-              </button>
-            </div>
+            <div className={servicePageStyles.errorText}>{error}</div>
+            <button
+              onClick={loadServices}
+              className={servicePageStyles.retryButton}>
+              Retry
+            </button>
           </div>
+        )}
+        {loading ? (
+          <section>
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className={servicePageStyles.skeletonCard}>
+                <div className={servicePageStyles.skeletonImage}></div>
+                <div className={servicePageStyles.skeletonText1}></div>
+                <div className={servicePageStyles.skeletonText2}></div>
+                <div className={servicePageStyles.skeletonButton}></div>
+              </div>
+            ))}
+          </section>
+        ) : (
+          <section className={servicePageStyles.servicesGrid}>
+            {shown.length > 0 ? (
+              shown.map((s) => <ServiceCard key={s.id || s.name} service={s} />)
+            ) : (
+              <div className={servicePageStyles.emptyState}>
+                No services available.
+              </div>
+            )}
+          </section>
         )}
       </div>
     </div>
