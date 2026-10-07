@@ -264,8 +264,7 @@ export const certificationStyles = {
 export const contactPageStyles = {
   // Page container
   pageContainer:
-    "min-h-screen bg-linear-to-br from-emerald-100 via-white to-emerald-50 py-12 px-4 sm:px-6 md:px-8 lg:px-20 font-serif relative overflow-hidden",
-
+    "min-h-screen bg-linear-to-br from-emerald-100 via-white to-emerald-50 pt-32 pb-12 px-4 sm:px-6 md:px-8 lg:px-20 font-serif relative overflow-hidden",
   // Background accents
   bgAccent1:
     "hidden md:block absolute top-20 left-10 w-72 h-72 bg-emerald-300 rounded-full blur-3xl opacity-18 animate-pulse",
@@ -888,7 +887,7 @@ export const navbarStyles = {
 export const servicePageStyles = {
   // Page container
   pageContainer:
-    "min-h-screen py-12 px-6 lg:px-20 font-serif bg-linear-to-b from-emerald-50 to-white",
+    "min-h-screen pt-24 pb-12 px-6 lg:px-20 font-serif bg-linear-to-b from-emerald-50 to-white",
   maxWidthContainer: "max-w-6xl mx-auto",
 
   // Header
