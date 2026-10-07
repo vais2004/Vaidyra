@@ -5,6 +5,7 @@ import Doctors from "./pages/Doctors";
 import DoctorDetails from "./pages/DoctorDetails";
 import Service from "./pages/Service";
 import ServiceDetails from "./pages/ServiceDetails";
+import Contact from "./pages/Contact";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/doctors/:id" element={<DoctorDetails />} />
         <Route path="/services" element={<Service />} />
         <Route path="/services/:id" element={<ServiceDetails />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </div>
   );
