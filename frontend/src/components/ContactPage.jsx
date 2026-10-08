@@ -281,7 +281,7 @@ const ContactPage = () => {
             <p className={s.infoText}>
               <Mail size={16} />
               vkawale2004@gmail.com
-            </p>
+            </p> 
           </div>
           <iframe
             src="https://www.google.com/maps?q=Balajinagar,Chhatrapati+Sambhajinagar,Maharashtra,India&output=embed"
