@@ -267,7 +267,35 @@ const ContactPage = () => {
             </div>
           </form>
         </div>
+        {/** right side*/}
+        <div className={s.infoContainer}>
+          <div className={s.infoCard}>
+            <h3 className={s.infoTitle}>Visit Our Clinic</h3>
+            <p className={s.infoText}>
+              Balajinagar, Chhatrapati Sambhajinagar, Maharashtra, India
+            </p>
+            <p className={s.infoText}>
+              <Phone size={16} />
+              8767843011
+            </p>
+            <p className={s.infoText}>
+              <Mail size={16} />
+              vkawale2004@gmail.com
+            </p>
+          </div>
+          <iframe
+            src="https://www.google.com/maps?q=Balajinagar,Chhatrapati+Sambhajinagar,Maharashtra,India&output=embed"
+            className={s.map}
+            title="Vaidyra Location Map"
+            loading="lazy"
+            allowFullScreen></iframe>
+          <div className={s.hoursContainer}>
+            <h4 className={s.hoursTitle}>Clinic Hours</h4>
+            <p className={s.hoursText}>Mon - Sat: 9:00 AM - 6:00 PM</p>
+          </div>
+        </div>
       </div>
+      <style>{s.animationKeyframes}</style>
     </div>
   );
 };
