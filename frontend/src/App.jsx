@@ -18,7 +18,7 @@ export default function App() {
         <Route path="/services" element={<Service />} />
         <Route path="/services/:id" element={<ServiceDetails />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/doctor-admin/login" element={<Login/>}/>
+        <Route path="/doctor-admin/login" element={<Login />} />
       </Routes>
     </div>
   );
