@@ -6,6 +6,7 @@ import DoctorDetails from "./pages/DoctorDetails";
 import Service from "./pages/Service";
 import ServiceDetails from "./pages/ServiceDetails";
 import Contact from "./pages/Contact";
+import Login from "./pages/Login";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/services" element={<Service />} />
         <Route path="/services/:id" element={<ServiceDetails />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/doctor-admin/login" element={<Login/>}/>
       </Routes>
     </div>
   );
