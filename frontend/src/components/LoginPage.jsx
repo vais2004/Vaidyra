@@ -84,6 +84,42 @@ const LoginPage = () => {
         <ArrowLeft className={loginPageStyles.backButtonIcon} />
         Back to Home
       </button>
+      <div className={loginPageStyles.loginCard}>
+        <div className={loginPageStyles.logoContainer}>
+          <img className={loginPageStyles.logo} src={logo} alt="logo" />
+        </div>
+        <h2 className={loginPageStyles.title}>Doctor Admin</h2>
+        <p className={loginPageStyles.subtitle}>
+          {" "}
+          Sign in to manage your profile & schedule
+        </p>
+        <form onSubmit={handleLogin} className={loginPageStyles.form}>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={handleChange}
+            className={loginPageStyles.input}
+            required
+          />{" "}
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className={loginPageStyles.input}
+            required
+          />
+          <button
+            type="submit"
+            disabled={busy}
+            className={loginPageStyles.submitButton}>
+            {busy ? "Signing in..." : "Login"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
