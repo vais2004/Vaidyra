@@ -7,6 +7,7 @@ import Service from "./pages/Service";
 import ServiceDetails from "./pages/ServiceDetails";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
+import DHome from "./pages/DHome";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/services/:id" element={<ServiceDetails />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/doctor-admin/login" element={<Login />} />
+        <Route path="/doctor-admin/:id" element={<DHome />} />
       </Routes>
     </div>
   );
