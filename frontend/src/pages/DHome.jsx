@@ -1,10 +1,10 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import DoctorNavbar from "../doctor/DoctorNavbar";
 
 const DHome = () => {
   return (
     <div>
-      <Navbar />
+      <DoctorNavbar />
     </div>
   );
 };
