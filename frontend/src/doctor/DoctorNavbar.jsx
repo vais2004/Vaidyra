@@ -29,69 +29,73 @@ const DoctorNavbar = () => {
 
   return (
     <>
-    <nav className={s.navContainer}>
-      <div className={s.leftBrand}>
-        <div className={s.logoContainer}>
-          <img src={logo} alt="logo" className={s.logoImage} />
+      <nav className={s.navContainer}>
+        <div className={s.leftBrand}>
+          <div className={s.logoContainer}>
+            <img src={logo} alt="logo" className={s.logoImage} />
+          </div>
+          <div className={s.brandTextContainer}>
+            <div className={s.brandTitle}>MedTek</div>
+            <div className={s.brandSubtitle}>Healthcare Solutions</div>
+          </div>
         </div>
-        <div className={s.brandTextContainer}>
-          <div className={s.brandTitle}>MedTek</div>
-          <div className={s.brandSubtitle}>Healthcare Solutions</div>
+        {/**desktop */}
+        <div className={s.desktopMenu}>
+          <div className={s.desktopMenuItems}>
+            {navItems.map(({ name, to, Icon }) => (
+              <NavLink
+                key={to}
+                to={to}
+                end={to === basePath}
+                className={({ isActive }) =>
+                  `${s.baseLink} ${isActive ? s.activeLink : s.inactiveLink}`
+                }
+                onClick={() => setOpen(false)}>
+                <span className={s.linkContent}>
+                  <Icon size={16} className={s.linkIcon} />
+                  <span className={s.linkText}>{name}</span>
+                </span>
+              </NavLink>
+            ))}
+          </div>
         </div>
-      </div>
-      {/**desktop */}
-      <div className={s.desktopMenu}>
-        <div className={s.desktopMenuItems}>
+        <div className={s.rightActions}>
+          <button
+            onClick={() => {
+              localStorage.removeItem("doctorToken_v1");
+              window.location.href = "/doctor-admin/login";
+            }}
+            className={s.logoutButtonDesktop}>
+            <LogOut size={16} />
+            <span>Logout</span>
+          </button>
+
+          {/**to toggle */}
+          <button
+            onClick={() => setOpen((s) => !s)}
+            className={s.hamburgerButtonMd}>
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
+          <button
+            onClick={() => setOpen((s) => !s)}
+            className={s.hamburgerButtonLg}>
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </nav>
+      <div className={s.mobileMenuContainer(open)}>
+        <div className={s.mobileMenuContent}>
           {navItems.map(({ name, to, Icon }) => (
             <NavLink
               key={to}
               to={to}
               end={to === basePath}
               className={({ isActive }) =>
-                `${s.baseLink} ${isActive ? s.activeLink : s.inactiveLink}`
-              }
-              onClick={() => setOpen(false)}>
-              <span className={s.linkContent}>
-                <Icon size={16} className={s.linkIcon} />
-                <span className={s.linkText}>{name}</span>
-              </span>
-            </NavLink>
+                `${s.mobileBaseLink} ${s.mobileInactiveLink}`
+              }></NavLink>
           ))}
         </div>
       </div>
-      <div className={s.rightActions}>
-        <button
-          onClick={() => {
-            localStorage.removeItem("doctorToken_v1");
-            window.location.href = "/doctor-admin/login";
-          }}
-          className={s.logoutButtonDesktop}>
-          <LogOut size={16} />
-          <span>Logout</span>
-        </button>
-
-        {/**to toggle */}
-        <button
-          onClick={() => setOpen((s) => !s)}
-          className={s.hamburgerButtonMd}>
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
-        <button
-          onClick={() => setOpen((s) => !s)}
-          className={s.hamburgerButtonLg}>
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
-      </div>
-    </nav>
-    <div className={s.mobileMenuContainer(open)}>
-            <div className={s.mobileMenuContent}>
-                {navItems.map(({name,to,Icon})=>(
-                  <NavLink key={to} to={to} end={to === basePath}>
-
-                  </NavLink>
-                ))}
-            </div>
-    </div>
     </>
   );
 };
