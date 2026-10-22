@@ -91,8 +91,9 @@ const DoctorNavbar = () => {
               to={to}
               end={to === basePath}
               className={({ isActive }) =>
-                `${s.mobileBaseLink} ${s.mobileInactiveLink}`
-              }></NavLink>
+                `${s.mobileBaseLink} ${isActive ? s.mobileActiveLink : s.mobileInactiveLink}`
+              }
+              onClick={() => setOpen(false)}></NavLink>
           ))}
         </div>
       </div>
