@@ -93,10 +93,25 @@ const DoctorNavbar = () => {
               className={({ isActive }) =>
                 `${s.mobileBaseLink} ${isActive ? s.mobileActiveLink : s.mobileInactiveLink}`
               }
-              onClick={() => setOpen(false)}></NavLink>
+              onClick={() => setOpen(false)}>
+              <Icon size={18} className="text-emerald-400" />
+              <span>{name}</span>
+            </NavLink>
           ))}
+          <button
+            className={s.mobileLogoutButton}
+            onClick={() => {
+              setOpen(false);
+              window.location.href = "/doctor-admin/login";
+            }}>
+            <div className={s.mobileMenuContainer}>
+              <LogOut size={16} />
+              Logout
+            </div>
+          </button>
         </div>
       </div>
+      <div className={s.spacer}></div>
     </>
   );
 };
