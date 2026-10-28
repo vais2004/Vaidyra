@@ -12,10 +12,12 @@ import { dashboardStyles } from "../assets/dummyStyles";
 
 const API_BASE = "http://localhost:4000";
 
+//date with time
 function parseDateTime(date, time) {
   return new Date(`${date}T${time}:00`);
 }
 
+// to get format either AM : PM
 function formatTimeAMPM(time24) {
   if (!time24) return "";
   const [hh, mm] = time24.split(":");
@@ -25,6 +27,7 @@ function formatTimeAMPM(time24) {
   return `${h}:${mm} ${ampm}`;
 }
 
+//to get date like Day Mon Year
 function formatDate(dateStr) {
   if (!dateStr) return "";
   const d = new Date(`${dateStr}T00:00:00`);
@@ -35,6 +38,7 @@ function formatDate(dateStr) {
   });
 }
 
+//status handling
 function backendToFrontendStatus(s) {
   if (!s) return "pending";
   const v = String(s).toLowerCase();
@@ -46,6 +50,7 @@ function backendToFrontendStatus(s) {
   return v;
 }
 
+//handling the status
 function frontendToBackendStatus(fs) {
   if (!fs) return "Pending";
   const v = String(fs).toLowerCase();
@@ -57,6 +62,7 @@ function frontendToBackendStatus(fs) {
   return fs;
 }
 
+// function to get the time in 24hr
 function to24Hour(timeStr) {
   if (!timeStr) return "00:00";
   const m = timeStr.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
@@ -76,6 +82,7 @@ function to24Hour(timeStr) {
   return `${String(hh).padStart(2, "0")}:${mm}`;
 }
 
+//to convert 12hrs coming from 24h time
 function to12HourFrom24(hhmm) {
   if (!hhmm) return "12:00 AM";
   const [hh, mm] = hhmm.split(":").map(Number);
@@ -84,6 +91,7 @@ function to12HourFrom24(hhmm) {
   return `${String(h12)}:${String(mm).padStart(2, "0")} ${ampm}`;
 }
 
+//to get these details from the server
 function normalizeAppointment(a) {
   if (!a) return null;
   const id = a._id || a.id || String(Math.random()).slice(2);
@@ -152,6 +160,7 @@ export default function DashboardPage({ apiBase }) {
 
   const doctorId = params.id;
 
+  //to fetch the appointment by id
   async function fetchAppointments() {
     setLoading(true);
     setError(null);
@@ -195,6 +204,7 @@ export default function DashboardPage({ apiBase }) {
     fetchAppointments();
   }, [API, doctorId]);
 
+  //computes the value for filter
   const sorted = useMemo(() => {
     return [...appointments].sort(
       (a, b) => parseDateTime(b.date, b.time) - parseDateTime(a.date, a.time),
@@ -214,6 +224,7 @@ export default function DashboardPage({ apiBase }) {
     .filter((a) => a.status === "complete")
     .reduce((s, a) => s + (Number(a.fee) || 0), 0);
 
+  //update the status
   async function updateStatusRemote(id, newStatusFrontend) {
     const appt = appointments.find((p) => p.id === id);
     if (!appt) return;
@@ -263,6 +274,9 @@ export default function DashboardPage({ apiBase }) {
     }
   }
 
+  //to reschedule the appointment
+  //also check whether appt is cancel or completed then we cannot change
+  // else reschedule it also prevent previous date and time
   async function rescheduleRemote(id, newDate, newTime24) {
     const appt = appointments.find((p) => p.id === id);
     if (!appt) return;
