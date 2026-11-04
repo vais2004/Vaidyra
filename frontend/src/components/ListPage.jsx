@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { listPageStyles } from "../assets/dummyStyles";
+import { listPageStyles as s } from "../assets/dummyStyles";
 import { useParams } from "react-router-dom";
 
 //helper functions similar to Dashboard page
