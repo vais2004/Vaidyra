@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { listPageStyles as s } from "../assets/dummyStyles";
 import { useParams } from "react-router-dom";
-import { Calendar, Search } from "lucide-react";
+import { Calendar, Phone, Search } from "lucide-react";
 
 const API_BASE = "http://localhost:4000";
 
@@ -549,6 +549,25 @@ const ListPage = () => {
                     <span>{formatTimeAMPM(a.time)}</span>
                   </div>
                   <div className={listPageStyles.feeText}>₹{a.fee}</div>
+                </div>
+                <div className={s.contactStatusSection}>
+                  <div className={s.phoneContainer}>
+                    <Phone className={s.phoneIcon} />
+                    <span className={s.phoneNumber}>{a.mobile}</span>
+                  </div>
+                  <div className={s.statusContainer}>
+                    <StatusBadge status={a.status} />
+                    <StatusSelect
+                      appointment={a}
+                      onChange={(s) => updateStatus(a.id, s)}
+                    />
+                  </div>
+                </div>
+                <div className={s.rescheduleContainer}>
+                  <RescheduleButton
+                    appointment={a}
+                    onReschedule={(d, t) => updateDateTime(a.id, d, t)}
+                  />
                 </div>
               </article>
             ))}
