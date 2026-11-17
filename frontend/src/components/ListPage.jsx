@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { listPageStyles as s } from "../assets/dummyStyles";
 import { useParams } from "react-router-dom";
+import { Calendar, Search } from "lucide-react";
+
+const API_BASE = "http://localhost:4000";
 
 //helper functions similar to Dashboard page
 function parseDateTime(date, time) {
@@ -459,8 +462,99 @@ const ListPage = () => {
       );
   }, [appointments, search, statusFilter]);
   return (
-    <div>
-      <div></div>
+    <div className={s.pageContainer}>
+      <div className={s.contentWrapper}>
+        <div className={s.headerContainer}>
+          <div>
+            <h1 className={s.headerTitle}>All Appointments</h1>
+            <p className={s.headerSubtitle}>
+              Latest at top - search by patient name
+            </p>
+          </div>
+          <div className={s.searchFilterContainer}>
+            <div className={s.searchContainer}>
+              <div className={s.searchIconContainer}>
+                <Search className={s.searchIcon} />
+              </div>
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className={s.searchInput}
+                placeholder="Search Patient Name"
+              />
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  className={s.clearSearchButton}>
+                  <X className={s.clearSearchButton} />
+                </button>
+              )}
+            </div>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className={s.statusFilter}
+              title="Filter by status">
+              <option value="">All</option>
+              <option value="complete">Completed</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="rescheduled">Rescheduled</option>
+            </select>
+          </div>
+        </div>
+        {loading ? (
+          <div className={s.loadingContainer}>Loading Appointments...</div>
+        ) : error ? (
+          <div className={s.errorContainer}>Error: {error}</div>
+        ) : (
+          <div className={s.appointmentsGrid}>
+            {filtered.map((a) => (
+              <article key={a.id} className={s.appointmentCard}>
+                <header className={s.cardHeader}>
+                  <div className={s.cardAvatar}>
+                    {a.doctorImage ? (
+                      <img
+                        src={a.doctorImage}
+                        alt={a.doctorName}
+                        className={s.cardAvatarImage}
+                        onError={(e) =>
+                          (e.currentTarget.style.display = "none")
+                        }
+                      />
+                    ) : (
+                      <div className={s.cardAvatarFallback}>
+                        {(a.doctorName || "D").charAt(0)}
+                      </div>
+                    )}
+                  </div>
+                  <div className={s.cardContent}>
+                    <div className={s.cardPatientName}>{a.patient}</div>
+                    <div className={s.cardPatientInfo}>
+                      {a.age} yrs &middot; {a.gender}
+                    </div>
+                    <div className={s.cardPatientInfo}>
+                      <span className={s.cardDoctorName}>{a.doctorName}</span>
+                    </div>
+                    <div className={s.cardSpeciality}>{a.speciality}</div>
+                  </div>
+                </header>
+
+                <div className={listPageStyles.dateTimeSection}>
+                  <div className={listPageStyles.dateTimeContainer}>
+                    <Calendar className={listPageStyles.calendarIcon} />
+                    <span className={listPageStyles.dateText}>
+                      {formatDate(a.date)}
+                    </span>
+                    <span className=" sm:inline">:</span>
+                    <span>{formatTimeAMPM(a.time)}</span>
+                  </div>
+                  <div className={listPageStyles.feeText}>₹{a.fee}</div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
