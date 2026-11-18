@@ -1,9 +1,14 @@
-import React from 'react'
+import React from "react";
+import DoctorNavbar from "./DoctorNavbar";
+import EditProfilePage from "../components/EditProfilePage";
 
 const EditProfile = () => {
   return (
-    <div>EditProfile</div>
-  )
-}
+    <div>
+      <DoctorNavbar />
+      <EditProfilePage />
+    </div>
+  );
+};
 
-export default EditProfile
+export default EditProfile;
