@@ -103,6 +103,7 @@ export default function EditProfilePage({ apiBase }) {
     };
   }, [id]);
 
+  //to add toast
   const addToast = (text, type = "success") => {
     const idt = Date.now() + Math.random();
     const t = { id: idt, text, type };
@@ -113,6 +114,7 @@ export default function EditProfilePage({ apiBase }) {
     );
   };
 
+  //to add date and check for duplicate date and prevent it
   const addDate = (dateStr) => {
     if (!dateStr) return;
     if (doc.schedule[dateStr]) {
@@ -123,6 +125,7 @@ export default function EditProfilePage({ apiBase }) {
     addToast("Date added successfully", "success");
   };
 
+  //same thing prevent duplicate slot and add new slot
   const addSlot = (dateStr, time) => {
     if (!dateStr || !time) return;
     const formatted = formatTimeFromInput(time);
@@ -158,6 +161,7 @@ export default function EditProfilePage({ apiBase }) {
     addToast(`Date ${dateStr} removed`, "info");
   };
 
+  //handling image
   const handleImageChange = (e) => {
     if (!editing) return;
     const file = e.target.files?.[0];
@@ -171,6 +175,7 @@ export default function EditProfilePage({ apiBase }) {
     addToast("Profile image updated locally", "success");
   };
 
+  //to change availability
   const toggleAvailability = () => {
     setDoc((d) => {
       const current = d.availability === "Available" || d.available === true;
@@ -180,6 +185,7 @@ export default function EditProfilePage({ apiBase }) {
     addToast("Availability toggled", "info");
   };
 
+  //to reset the profile back to initial
   const handleReset = async () => {
     try {
       setLoading(true);
@@ -201,6 +207,7 @@ export default function EditProfilePage({ apiBase }) {
     }
   };
 
+  //to update
   const handleSave = async () => {
     if (!doc) return;
     setSaveMessage({ type: "saving", text: "Saving profile..." });
@@ -332,6 +339,7 @@ export default function EditProfilePage({ apiBase }) {
       ]
     : [];
 
+  //if the state is in loading
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -343,6 +351,7 @@ export default function EditProfilePage({ apiBase }) {
     );
   }
 
+  //if the doctor is not found by id
   if (!doc) {
     return (
       <div className={styles.loadingContainer}>
