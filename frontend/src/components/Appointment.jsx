@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   appointmentPageStyles as s,
   cardStyles,
@@ -6,7 +6,15 @@ import {
   iconSize,
 } from "../assets/dummyStyles";
 import axios from "axios";
-import { Bell, CheckCircle, Clock, CreditCard, Wallet, XCircle } from "lucide-react";
+import {
+  Bell,
+  CheckCircle,
+  Clock,
+  CreditCard,
+  Wallet,
+  XCircle,
+} from "lucide-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 const API_BASE = "http://localhost:4000";
 const API = axios.create({ baseUrl: API_BASE });
@@ -55,7 +63,7 @@ function parseDateTime(dateStr, timeStr) {
   return new Date();
 }
 
-//this function will help in getting the status 
+//this function will help in getting the status
 function computeStatus(item) {
   const now = new Date();
   if (!item) return "Pending";
@@ -141,6 +149,334 @@ const StatusBadge = ({ itemStatus }) => {
 };
 
 const Appointment = () => {
+  const { isLoaded, isSignedIn, getToken } = useAuth();
+  const { user } = useUser();
+
+  const [loadingDoctors, setLoadingDoctors] = useState(false);
+  const [loadingServices, setLoadingServices] = useState(false);
+
+  const [doctorAppts, setDoctorAppts] = useState([]);
+  const [serviceAppts, setServiceAppts] = useState([]);
+
+  const [appointmentsRaw, setAppointmentsRaw] = useState({
+    doctors: [],
+    services: [],
+  });
+  const [error, setError] = useState(null);
+
+  //to fetch doctor Appointments
+  const loadDoctorAppointments = useCallback(async () => {
+    if (!isLoaded) return;
+    setLoadingDoctors(true);
+    setError(null);
+
+    let token = null;
+    try {
+      token = await getToken();
+      console.log(
+        "Clerk token (frontend):",
+        token ? `${token.slice(0, 20)}...` : null,
+      );
+    } catch (err) {
+      console.error("Failed to get Clerk token (frontend):", err);
+    }
+
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    console.log("Outgoing headers for /api/appointments/me:", headers);
+
+    try {
+      const resp = await API.get("/api/appointments/me", { headers });
+      console.log("Response from /api/appointments/me:", resp?.data);
+
+      const fetched =
+        resp?.data?.appointments ?? resp?.data?.data ?? resp?.data ?? [];
+      const arr = Array.isArray(fetched) ? fetched : [];
+
+      const doctors = arr.filter((a) => {
+        return (
+          (a.doctorId !== undefined && a.doctorId !== null) ||
+          !!a.doctorName ||
+          !a.serviceId
+        );
+      });
+
+      setDoctorAppts(doctors);
+      setAppointmentsRaw((p) => ({ ...p, doctors: doctors }));
+    } catch (err) {
+      console.error(
+        "Error calling /api/appointments/me:",
+        err?.response?.data || err.message || err,
+      );
+
+      if (user?.id) {
+        try {
+          console.log("Attempting debug request with ?createdBy=", user.id);
+          const debugResp = await API.get(
+            `/api/appointments/me?createdBy=${user.id}`,
+            { headers },
+          );
+          console.log("Debug fallback response:", debugResp?.data);
+
+          const fetched =
+            debugResp?.data?.appointments ??
+            debugResp?.data?.data ??
+            debugResp?.data ??
+            [];
+          const arr = Array.isArray(fetched) ? fetched : [];
+          const doctors = arr.filter(
+            (a) =>
+              (a.doctorId !== undefined && a.doctorId !== null) ||
+              !!a.doctorName ||
+              !a.serviceId,
+          );
+          setDoctorAppts(doctors);
+          setAppointmentsRaw((p) => ({ ...p, doctors }));
+        } catch (err2) {
+          console.error(
+            "Debug fallback failed (doctors):",
+            err2?.response?.data || err2.message || err2,
+          );
+          setError((prev) =>
+            prev
+              ? prev + " | Doctors failed"
+              : "Failed to load doctor appointments. Check console.",
+          );
+          setDoctorAppts([]);
+        }
+      } else {
+        setError((prev) =>
+          prev
+            ? prev + " | No user id for doctors"
+            : "Failed to load doctor appointments and no user id available for debug fallback.",
+        );
+        setDoctorAppts([]);
+      }
+    } finally {
+      setLoadingDoctors(false);
+    }
+  }, [isLoaded, getToken, user]);
+
+  // to load service appointment form the server side
+  const loadServiceAppointments = useCallback(async () => {
+    if (!isLoaded) return;
+    setLoadingServices(true);
+    setError(null);
+
+    let token = null;
+    try {
+      token = await getToken();
+    } catch (err) {
+      console.error("Failed to get Clerk token (frontend): err", err);
+    }
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    console.log("Outgoing headers for /api/service-appointments/me:", headers);
+
+    try {
+      const resp = await API.get("/api/service-appointments/me", { headers });
+      console.log("Response from /api/service-appointments/me:", resp?.data);
+
+      const fetched =
+        resp?.data?.appointments ?? resp?.data?.data ?? resp?.data ?? [];
+      const arr = Array.isArray(fetched) ? fetched : [];
+      console.log(arr);
+
+      setServiceAppts(arr);
+      setAppointmentsRaw((p) => ({ ...p, services: arr }));
+    } catch (err) {
+      console.error(
+        "Error calling /api/service-appointments/me:",
+        err?.response?.data || err.message || err,
+      );
+
+      if (user?.id) {
+        try {
+          console.log("Attempting debug request with ?createdBy=", user.id);
+          const debugResp = await API.get(
+            `/api/service-appointments/me?createdBy=${user.id}`,
+            { headers },
+          );
+          console.log("Debug fallback response (services):", debugResp?.data);
+
+          const fetched =
+            debugResp?.data?.appointments ??
+            debugResp?.data?.data ??
+            debugResp?.data ??
+            [];
+          const arr = Array.isArray(fetched) ? fetched : [];
+          setServiceAppts(arr);
+          setAppointmentsRaw((p) => ({ ...p, services: arr }));
+        } catch (err2) {
+          console.error(
+            "Debug fallback failed (services):",
+            err2?.response?.data || err2.message || err2,
+          );
+          setError((prev) =>
+            prev
+              ? prev + " | Services failed"
+              : "Failed to load service appointments. Check console.",
+          );
+          setServiceAppts([]);
+        }
+      } else {
+        setError((prev) =>
+          prev
+            ? prev + " | No user id for services"
+            : "Failed to load service appointments and no user id available for debug fallback.",
+        );
+        setServiceAppts([]);
+      }
+    } finally {
+      setLoadingServices(false);
+    }
+  }, [isLoaded, getToken, user]);
+
+  useEffect(() => {
+    loadDoctorAppointments();
+    loadServiceAppointments();
+  }, [
+    isLoaded,
+    isSignedIn,
+    user,
+    loadDoctorAppointments,
+    loadServiceAppointments,
+  ]);
+
+  //to reschedule we have to normalize the field with UI
+  function normalizeRescheduled(rt) {
+    if (!rt) return null;
+    if (rt.date && rt.time) return { date: rt.date, time: rt.time };
+    if (
+      rt.date &&
+      (rt.hour !== undefined || rt.minute !== undefined || rt.ampm)
+    ) {
+      const hour = rt.hour ?? 0;
+      const minute = rt.minute ?? 0;
+      const ampm = rt.ampm ?? "";
+      return { date: rt.date, time: `${hour}:${pad(minute)} ${ampm}` };
+    }
+    return {
+      date: rt.date || rt?.dateString || "",
+      time:
+        rt.time ||
+        (rt.hour
+          ? `${rt.hour}:${pad(rt.minute || 0)} ${rt.ampm || ""}`
+          : rt?.timeString || ""),
+    };
+  }
+
+  //to get the appointment details
+  const appointmentData = useMemo(() => {
+    return doctorAppts
+      .map((a) => {
+        const id = a._id || a.id || String(a._id || "");
+        const doctorObj =
+          typeof a.doctorId === "object" && a.doctorId ? a.doctorId : {};
+        const image =
+          doctorObj.imageUrl ||
+          doctorObj.image ||
+          doctorObj.avatar ||
+          a.doctorImage?.url ||
+          a.doctorImage ||
+          "";
+        const doctorName =
+          (doctorObj.name && String(doctorObj.name).trim()) ||
+          (a.doctorName && String(a.doctorName).trim()) ||
+          (a.doctor && String(a.doctor).trim()) ||
+          (a.patientName && String(a.patientName).trim()) ||
+          "Doctor";
+
+        const patientName = a.patientName || a.patient || "Patient";
+        const specialization =
+          doctorObj.specialization || a.specialization || a.speciality || "";
+        const experience = doctorObj.experience || a.experience || "";
+        const date = a.date || "";
+        let time = a.time || "";
+
+        if (!time) {
+          if (a.hour !== undefined && a.minute !== undefined && a.ampm) {
+            time = `${a.hour}:${pad(a.minute)} ${a.ampm}`;
+          } else if (a.hour !== undefined && a.ampm) {
+            time = `${a.hour}:00 ${a.ampm}`;
+          }
+        }
+
+        const payment = (a.payment && a.payment.method) || "Cash";
+        const status =
+          a.status ||
+          (a.payment && a.payment.status === "Paid" ? "Confirmed" : "Pending");
+        const rescheduledTo = normalizeRescheduled(
+          a.rescheduledTo || {
+            date: a.rescheduledDate,
+            time: a.rescheduledTime,
+          },
+        );
+
+        return {
+          id,
+          image,
+          doctor: doctorName,
+          patientName,
+          specialization,
+          experience,
+          date,
+          time,
+          payment,
+          status,
+          rescheduledTo,
+        };
+      })
+      .map((x) => ({ ...x, status: computeStatus(x) }));
+  }, [doctorAppts]);
+
+  const serviceData = useMemo(() => {
+    return serviceAppts
+      .map((s) => {
+        const id = s._id || s.id || String(s._id || "");
+        const svc =
+          typeof s.serviceId === "object" && s.serviceId ? s.serviceId : {};
+        const image =
+          svc.imageUrl ||
+          svc.image ||
+          svc.imageSmall ||
+          s.serviceImage?.url ||
+          s.serviceImage ||
+          "";
+        const name = s.serviceName || svc.name || svc.title || "Service";
+        const patientName = s.patientName || s.patient || "Patient";
+        const price = s.fees ?? s.amount ?? s.price ?? 0;
+        const date = s.date || "";
+        let time = s.time || "";
+        if (!time) {
+          if (s.hour !== undefined && s.minute !== undefined && s.ampm) {
+            time = `${s.hour}:${pad(s.minute)} ${s.ampm}`;
+          } else if (s.hour !== undefined && s.ampm) {
+            time = `${s.hour}:00 ${s.ampm}`;
+          }
+        }
+
+        const payment = (s.payment && s.payment.method) || "Cash";
+        const status =
+          s.status ||
+          (s.payment && s.payment.status === "Paid" ? "Confirmed" : "Pending");
+
+        const rescheduledTo = normalizeRescheduled(s.rescheduledTo || null);
+
+        return {
+          id,
+          image,
+          name,
+          patientName,
+          price,
+          date,
+          time,
+          payment,
+          status,
+          rescheduledTo,
+        };
+      })
+      .map((x) => ({ ...x, status: computeStatus(x) }));
+  }, [serviceAppts]);
+
   return (
     <div>
       <div>Appintment</div>
