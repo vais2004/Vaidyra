@@ -338,7 +338,6 @@ export default function EditProfilePage({ apiBase }) {
         },
       ]
     : [];
-
   //if the state is in loading
   if (loading) {
     return (
