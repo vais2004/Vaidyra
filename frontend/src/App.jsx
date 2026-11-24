@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import DHome from "./pages/DHome";
 import List from "./doctor/List";
 import EditProfile from "./doctor/EditProfile";
+import AppointmentPage from "./pages/AppointmentPage";
 
 export default function App() {
   return (
@@ -20,7 +21,11 @@ export default function App() {
         <Route path="/doctors/:id" element={<DoctorDetails />} />
         <Route path="/services" element={<Service />} />
         <Route path="/services/:id" element={<ServiceDetails />} />
+
+        <Route path="/appointments" element={<AppointmentPage />} />
         <Route path="/contact" element={<Contact />} />
+
+        {/**Doctor */}
         <Route path="/doctor-admin/login" element={<Login />} />
         <Route path="/doctor-admin/:id" element={<DHome />} />
         <Route path="/doctor-admin/:id/appointments" element={<List />} />
