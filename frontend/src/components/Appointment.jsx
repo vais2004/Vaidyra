@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 import {
   Bell,
+  CalendarDays,
   CheckCircle,
   Clock,
   CreditCard,
@@ -15,6 +16,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { useAuth, useUser } from "@clerk/clerk-react";
+import { Toaster } from "react-hot-toast";
 
 const API_BASE = "http://localhost:4000";
 const API = axios.create({ baseUrl: API_BASE });
@@ -478,8 +480,109 @@ const Appointment = () => {
   }, [serviceAppts]);
 
   return (
-    <div>
-      <div>Appintment</div>
+    <div className={s.pageContainer}>
+      <Toaster position="top-right" />
+      <div className={s.maxWidthContainer}>
+        <h1 className={s.doctorTitle}>Your Doctor Appointments</h1>
+        {loadingDoctors && (
+          <div className={s.loadingText}>Loading Doctors...</div>
+        )}
+
+        {!loadingDoctors && appointmentData.length === 0 && (
+          <div className={s.emptyStateText}>No doctor appointments found.</div>
+        )}
+
+        <div className={s.doctorGrid}>
+          {appointmentData.map((item) => (
+            <div key={item.id} className={cardStyles.doctorCard}>
+              <div className={cardStyles.doctorImageContainer}>
+                <img
+                  src={item.image || "/placeholder-doctor.png"}
+                  alt={item.doctor}
+                  className={cardStyles.image}
+                  loading="lazy"
+                />
+              </div>
+              <h2 className={cardStyles.doctorName}>{item.doctor}</h2>
+              <div className={cardStyles.specialization}>
+                {item.specialization}{" "}
+                {item.experience ? `• ${item.experience}` : ""}
+              </div>
+              <p className={cardStyles.dateContainer}>
+                <CalendarDays className={iconSize.medium} /> {item.date}
+              </p>
+              <p className={cardStyles.timeContainer}>
+                <Clock className={iconSize.medium} /> {item.time}
+              </p>
+              <div className={cardStyles.badgesContainer}>
+                <PaymentBadge payment={item.payment} />
+                <StatusBadge itemStatus={item.status} />
+              </div>
+              {item.status === "Rescheduled" && item.rescheduledTo ? (
+                <div className={cardStyles.rescheduledText}>
+                  Reschedule to{" "}
+                  <span className={cardStyles.rescheduledSpan}>
+                    {item.rescheduledTo.date}: {item.rescheduledTo.time}
+                  </span>
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </div>
+        <h2 className={s.serviceTitle}>Your Booked Service</h2>
+        {loadingServices && (
+          <div className={s.serviceLoadingText}>
+            Loading Service Bookings...
+          </div>
+        )}
+
+        {!loadingServices && serviceData.length === 0 && (
+          <div className={s.serviceEmptyStateText}>
+            No service bookings found.
+          </div>
+        )}
+
+        <div className={s.serviceGrid}>
+          {serviceData.map((srv) => (
+            <div key={srv.id} className={cardStyles.serviceCard}>
+              <div className={cardStyles.serviceImageContainer}>
+                <img
+                  src={srv.image || "/placeholder-service.png"}
+                  alt={srv.name}
+                  className={cardStyles.image}
+                  loading="lazy"
+                />
+              </div>
+
+              <h3 className={cardStyles.serviceName}>{srv.name}</h3>
+
+              <p className={cardStyles.price}>₹{srv.price}</p>
+
+              <p className={cardStyles.serviceDateContainer}>
+                <CalendarDays className={iconSize.medium} /> {srv.date}
+              </p>
+
+              <p className={cardStyles.serviceTimeContainer}>
+                <Clock className={iconSize.medium} /> {srv.time}
+              </p>
+
+              <div className={cardStyles.badgesContainer}>
+                <PaymentBadge payment={srv.payment} />
+                <StatusBadge itemStatus={srv.status} />
+              </div>
+
+              {srv.status === "Rescheduled" && srv.rescheduledTo ? (
+                <div className={cardStyles.serviceRescheduledText}>
+                  Rescheduled to{" "}
+                  <span className={cardStyles.rescheduledSpan}>
+                    {srv.rescheduledTo.date} : {srv.rescheduledTo.time}
+                  </span>
+                </div>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
